@@ -25,22 +25,64 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123123123')
 
         ])->assignRole('admin');
+         User::create([
+            'name' => 'User',
+            'email' => 'user@gmail.com',
+            'password' => bcrypt('123123123')
+
+        ])->assignRole('operadora');
 
         
         User::factory(6)->create();
         
-        Ocomerciale::factory(4)->create();
+       $this->call(OcomercialeSeeder::class);
 
-        Cliente::create([
-        'id_oficina_comercial' => '1',
-        'servicio' => fake()->phoneNumber(), 
-        'sector' =>  'R',
-        'nombre' => fake()->name(),
-        'direccion' => fake()->address(),
-        'cuenta_bancaria' => '99900394944',
-        'fecha_alta' => fake()->date()
-        ]);
-
+       
+       Cliente::create([
+       'id_oficina_comercial' => '4',
+       'servicio' => fake()->phoneNumber(), 
+       'sector' =>  'R',
+       'nombre' => fake()->name(),
+       'direccion' => fake()->address(),
+       'cuenta_bancaria' => '99900394944',
+       'fecha_alta' => fake()->date()
+       ]);
+       Cliente::create([
+       'id_oficina_comercial' => '4',
+       'servicio' => fake()->phoneNumber(), 
+       'sector' =>  'R',
+       'nombre' => fake()->name(),
+       'direccion' => fake()->address(),
+       'cuenta_bancaria' => '99900394944',
+       'fecha_alta' => fake()->date()
+       ]);
+       Cliente::create([
+       'id_oficina_comercial' => '4',
+       'servicio' => fake()->phoneNumber(), 
+       'sector' =>  'R',
+       'nombre' => fake()->name(),
+       'direccion' => fake()->address(),
+       'cuenta_bancaria' => '99900394944',
+       'fecha_alta' => fake()->date()
+       ]);
+       Cliente::create([
+       'id_oficina_comercial' => '4',
+       'servicio' => fake()->phoneNumber(), 
+       'sector' =>  'R',
+       'nombre' => fake()->name(),
+       'direccion' => fake()->address(),
+       'cuenta_bancaria' => '99900394944',
+       'fecha_alta' => fake()->date()
+       ]);
+       Cliente::create([
+       'id_oficina_comercial' => '4',
+       'servicio' => fake()->phoneNumber(), 
+       'sector' =>  'R',
+       'nombre' => fake()->name(),
+       'direccion' => fake()->address(),
+       'cuenta_bancaria' => '99900394944',
+       'fecha_alta' => fake()->date()
+       ]);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

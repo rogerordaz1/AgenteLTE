@@ -48,7 +48,7 @@
                                                     {{ $comercial->direccion }}
                                                 </td>
                                                 <td style="">
-                                                    <a href="{{ route('dashboard.ocomerciales.show' , $comercial->id ) }}" type="button" class="btn btn-info">Show</a>
+                                                    <a href="{{ route('dashboard.ocomerciales.show' , $comercial->id ) }}" type="button" class="btn btn-info">Clientes</a>
                                                 </td>
 
 

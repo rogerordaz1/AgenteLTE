@@ -38,7 +38,7 @@
                     class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}"> 
                     <i class="nav-icon fab fa-teamspeak"></i>                   
                     <p>
-                        DashBoard
+                        Panel de Control
                         {{-- <span class="right badge badge-danger">New</span> --}}
                     </p>
                 </a>
@@ -101,7 +101,7 @@
 
         <li class="nav-item">
             <a href="{{ route('dashboard.ocomerciales.index') }}"
-             class="nav-link {{ request()->is('dashboard/ocomerciales') ? 'active' : '' }}">
+             class="nav-link {{ request()->is('dashboard/ocomerciales') || request()->is('dashboard/ocomerciales/*') ? 'active' : '' }}">
 
 
                 <i class="nav-icon fas fa-landmark"></i>
