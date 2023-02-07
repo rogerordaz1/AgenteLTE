@@ -11,14 +11,16 @@ class CountCard extends Component
     public $count;
     public $text;
     public $color;
+    public $link;
 
 
 
-    public function __construct($count = 0,$text,$color)
+    public function __construct($count = 0,$text,$color, $link)
     {
         $this->count = $count;
         $this->text = $text;
         $this->color = $color;
+        $this->link = $link;
         
     }
 

@@ -8,11 +8,6 @@ use Illuminate\Database\Seeder;
 
 class OcomercialeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         Ocomerciale::create([

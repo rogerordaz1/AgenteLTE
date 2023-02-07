@@ -124,7 +124,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('dashboard.clientes.index') }}" 
+            class="nav-link {{ request()->is('dashboard/clientes') || request()->is('dashboard/clientes/*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-user"></i>
                 <p>
                     Clientes

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\OcomercialeController;
@@ -29,6 +30,9 @@ Route::resource('/dashboard/roles', RoleController::class)->except('show')
 
 Route::resource('/dashboard/ocomerciales', OcomercialeController::class)
 ->middleware(['auth' , 'verified'])->names('dashboard.ocomerciales');
+
+Route::resource('/dashboard/clientes', ClienteController::class)
+->middleware(['auth' , 'verified'])->names('dashboard.clientes');
 
 
 Route::get('/dashboard', function () {
