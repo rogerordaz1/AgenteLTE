@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Cliente;
+use App\Models\Factura;
 use App\Models\Ocomerciale;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -76,20 +77,34 @@ class DatabaseSeeder extends Seeder
        ]);
        Cliente::create([
        'id_oficina_comercial' => '4',
-       'servicio' => fake()->phoneNumber(), 
+       'servicio' => '48713264', 
        'sector' =>  'R',
-       'nombre' => fake()->name(),
+       'nombre' => 'Roger Luis Ordaz',
        'direccion' => fake()->address(),
        'cuenta_bancaria' => '99900394944',
        'fecha_alta' => fake()->date()
        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+      
         
-
+        Factura::create([
+            'oficina' => '33',
+            'agrupacion' => '1231233321',
+            'cuenta' => '12332131',
+            'no_factura' => '34234234',
+            'nombre_cliente' => 'Roger Luis Ordaz',
+            'servicio_cliente'  => '48713264',
+            'cuota' => fake()->randomNumber(),
+            'LDN'  => fake()->randomNumber(),
+            'LDI'  => fake()->randomNumber(),
+            'local'  => fake()->randomNumber(),
+            'otros' => fake()->randomNumber(),
+            'impuesto' => fake()->randomNumber(),
+            'comision' => fake()->randomNumber(),
+            'facturado' => fake()->randomNumber(),
+            'atrasos' => fake()->randomNumber(),
+            'total' => fake()->randomNumber(),
+        ]);
           
 
 

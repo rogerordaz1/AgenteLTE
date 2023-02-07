@@ -59,7 +59,9 @@
                                                 <td style=""> {{ $cliente->direccion }}</td>
                                                 <td style=""> {{ $cliente->cuenta_bancaria }}</td>
                                                 <td style=""> {{ $cliente->fecha_alta }}</td>
-                                                   
+                                                <td style="">
+                                                    <a href="{{ route('dashboard.clientes.show' , $cliente->id ) }}" type="button" class="btn btn-info">Clientes</a>
+                                                </td>   
                                                
                                                 
                                             </tr>

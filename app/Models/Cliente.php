@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Factura;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cliente extends Model
 {
@@ -30,5 +31,9 @@ class Cliente extends Model
     public function agente()
     {
         return $this->belongsTo(Agente::class, 'id_agente', 'id');
+    }
+    public function factura()
+    {
+        return $this->hasOne(Factura::class , 'servicio_cliente' , 'servicio' );
     }
 }

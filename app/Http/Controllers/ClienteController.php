@@ -49,7 +49,13 @@ class ClienteController extends Controller
      */
     public function show($id)
     {
-        //
+        $cliente = Cliente::find($id);
+        
+
+        return view('clientes.show' , [
+           
+            'cliente' => $cliente
+        ]);
     }
 
     /**
