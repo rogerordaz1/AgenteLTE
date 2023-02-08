@@ -9,6 +9,16 @@ class Agente extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'id_oficina_comercial',
+        'servicio',
+        'sector',
+        'nombre',
+        'direccion',
+        'cuenta_bancaria',
+        'fecha_alta',
+    ];
 
     public function ocomercial(){
         return $this->belongsTo(Ocomerciale::class);

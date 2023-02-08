@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\XmlFileController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\DatatableController;
 use App\Http\Controllers\OcomercialeController;
 
 /*
@@ -44,5 +46,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/dashboard/xmlfiles', [XmlFileController::class , 'index'])->name('dashboard.xmlfile');
+Route::post('/dashboard/file/store', [XmlFileController::class , 'store'])->name('dashboard.file.store');
+
+
+Route::get('datatable/clientes', [DatatableController::class , 'clientes'])->name('datatable.clientes');
+
+
 
 require __DIR__.'/auth.php';

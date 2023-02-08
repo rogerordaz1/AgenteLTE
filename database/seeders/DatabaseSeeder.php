@@ -39,72 +39,29 @@ class DatabaseSeeder extends Seeder
        $this->call(OcomercialeSeeder::class);
 
        
-       Cliente::create([
-       'id_oficina_comercial' => '4',
-       'servicio' => fake()->phoneNumber(), 
-       'sector' =>  'R',
-       'nombre' => fake()->name(),
-       'direccion' => fake()->address(),
-       'cuenta_bancaria' => '99900394944',
-       'fecha_alta' => fake()->date()
-       ]);
-       Cliente::create([
-       'id_oficina_comercial' => '4',
-       'servicio' => fake()->phoneNumber(), 
-       'sector' =>  'R',
-       'nombre' => fake()->name(),
-       'direccion' => fake()->address(),
-       'cuenta_bancaria' => '99900394944',
-       'fecha_alta' => fake()->date()
-       ]);
-       Cliente::create([
-       'id_oficina_comercial' => '4',
-       'servicio' => fake()->phoneNumber(), 
-       'sector' =>  'R',
-       'nombre' => fake()->name(),
-       'direccion' => fake()->address(),
-       'cuenta_bancaria' => '99900394944',
-       'fecha_alta' => fake()->date()
-       ]);
-       Cliente::create([
-       'id_oficina_comercial' => '4',
-       'servicio' => fake()->phoneNumber(), 
-       'sector' =>  'R',
-       'nombre' => fake()->name(),
-       'direccion' => fake()->address(),
-       'cuenta_bancaria' => '99900394944',
-       'fecha_alta' => fake()->date()
-       ]);
-       Cliente::create([
-       'id_oficina_comercial' => '4',
-       'servicio' => '48713264', 
-       'sector' =>  'R',
-       'nombre' => 'Roger Luis Ordaz',
-       'direccion' => fake()->address(),
-       'cuenta_bancaria' => '99900394944',
-       'fecha_alta' => fake()->date()
-       ]);
+       
+      
 
       
         
-        Factura::create([
-            'oficina' => '33',
-            'agrupacion' => '1231233321',
-            'cuenta' => '12332131',
-            'no_factura' => '34234234',
-            'nombre_cliente' => 'Roger Luis Ordaz',
-            'servicio_cliente'  => '48713264',
-            'cuota' => fake()->randomNumber(),
-            'LDN'  => fake()->randomNumber(),
-            'LDI'  => fake()->randomNumber(),
-            'local'  => fake()->randomNumber(),
-            'otros' => fake()->randomNumber(),
-            'impuesto' => fake()->randomNumber(),
-            'comision' => fake()->randomNumber(),
-            'facturado' => fake()->randomNumber(),
-            'atrasos' => fake()->randomNumber(),
-            'total' => fake()->randomNumber(),
-        ]);
+        // Factura::create([
+        //     'oficina' => '33',
+        //     'agrupacion' => '1231233321',
+        //     'cuenta' => '12332131',
+        //     'no_factura' => '34234234',
+        //     'nombre_cliente' => 'Roger Luis Ordaz',
+        //     'servicio_cliente'  => '48713264',
+        //     'cuota' => fake()->randomNumber(),
+        //     'LDN'  => fake()->randomNumber(),
+        //     'LDI'  => fake()->randomNumber(),
+        //     'local'  => fake()->randomNumber(),
+        //     'otros' => fake()->randomNumber(),
+        //     'impuesto' => fake()->randomNumber(),
+        //     'comision' => fake()->randomNumber(),
+        //     'facturado' => fake()->randomNumber(),
+        //     'atrasos' => fake()->randomNumber(),
+        //     'total' => fake()->randomNumber(),
+        // ]);
           
 
 

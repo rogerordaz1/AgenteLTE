@@ -46,27 +46,9 @@
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">Fecha alta</th>
+                                            
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach ($clientes as $cliente)
-                                            <tr class="even">
-                                                <td class="dtr-control sorting_1" tabindex="0">{{ $cliente->id }}</td>
-                                                <td style="">{{ $cliente->id_oficina_comercial }}</td>
-                                                <td style="">{{ $cliente->servicio }}</td>
-                                                <td style="">{{ $cliente->sector }}</td>
-                                                <td style=""> {{ $cliente->nombre }} </td>
-                                                <td style=""> {{ $cliente->direccion }}</td>
-                                                <td style=""> {{ $cliente->cuenta_bancaria }}</td>
-                                                <td style=""> {{ $cliente->fecha_alta }}</td>
-                                                <td style="">
-                                                    <a href="{{ route('dashboard.clientes.show' , $cliente->id ) }}" type="button" class="btn btn-info">Clientes</a>
-                                                </td>   
-                                               
-                                                
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
                                     <tfoot>
                                         <tr>
                                             <th rowspan="1" colspan="1" style="">ID</th>
@@ -77,6 +59,7 @@
                                             <th rowspan="1" colspan="1" style="">Direccion</th>
                                             <th rowspan="1" colspan="1" style="">Cuenta Bancaria</th>
                                             <th rowspan="1" colspan="1" style="">Fecha alta</th>
+                                            
                                          
 
                                         </tr>
@@ -98,7 +81,7 @@
 
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} ">
-    <link rel="stylesheet" href=" {{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }} ">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }} ">
 @endsection
 
 @section('js')
@@ -120,9 +103,23 @@
     <script>
         $(function() {
             $("#comerciales").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
+                "ajax" : {
+                   url : "{{ route('datatable.clientes') }}",
+                   dataSrc: 'data'
+                },
+                "columns" : [
+                    {data: 'id'},
+                    {data: 'id_oficina_comercial'},
+                    {data: 'servicio'},
+                    {data: 'sector'},
+                    {data: 'nombre'},
+                    {data: 'direccion'},
+                    {data: 'cuenta_bancaria'},
+                    {data: 'fecha_alta'},
+                ],
+
+
+
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#comerciales_wrapper .col-md-6:eq(0)');
 

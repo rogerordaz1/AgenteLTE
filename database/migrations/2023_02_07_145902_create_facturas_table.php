@@ -20,13 +20,8 @@ return new class extends Migration
             $table->string('cuenta');
             $table->string('no_factura');
             $table->string('nombre_cliente');
-            
-           
-           
-           
             $table->string('servicio_cliente');
-            $table->foreign('servicio_cliente')->references('servicio')->on('clientes');
-
+            $table->foreign('servicio_cliente')->references('servicio')->on('clientes')->onDelete('cascade');
             $table->string('cuota')->nullable();
             $table->string('LDN')->nullable();
             $table->string('LDI')->nullable();

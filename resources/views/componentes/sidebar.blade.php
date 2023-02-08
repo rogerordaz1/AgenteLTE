@@ -74,6 +74,18 @@
         {{-- Despues Cada vez que valla haciendo Algo con los links de la apk ir ajustando los li con los active................. --}}
         @can('dashboard.users.index')
             <li class="nav-item">
+                <a href="{{ route('dashboard.xmlfile') }}"
+                    class="nav-link {{ request()->is('dashboard/xmlfiles') || request()->is('dashboard/xmlfiles/*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-user-shield"></i>
+                    <p>
+                        Actualizar BD
+                        {{-- <span class="right badge badge-danger">New</span> --}}
+                    </p>
+                </a>
+            </li>
+        @endcan
+        @can('dashboard.users.index')
+            <li class="nav-item">
                 <a href="{{ route('dashboard.roles.index') }}"
                     class="nav-link {{ request()->is('dashboard/roles') || request()->is('dashboard/roles/*') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-user-shield"></i>
