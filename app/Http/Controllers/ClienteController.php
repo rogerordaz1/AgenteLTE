@@ -14,10 +14,10 @@ class ClienteController extends Controller
      */
     public function index()
     {
-       $clientes =  Cliente::all();
-       return view('clientes.index' ,[
-        'clientes' => $clientes
-       ]);
+      
+       return view('clientes.index');
+       
+      
     }
 
     /**
@@ -51,9 +51,7 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::find($id);
         
-
-        return view('clientes.show' , [
-           
+        return view('clientes.show' , [ 
             'cliente' => $cliente
         ]);
     }

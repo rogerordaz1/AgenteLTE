@@ -1,22 +1,20 @@
 @extends('panel_admin')
 
 @section('contenido')
-    
-
-
     {{--  La DataTablde DE adminlte --}}
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Clientes</h3>
+                    <div id="buttons"></div>
                 </div>
 
                 <div class="card-body">
-                    <div id="comerciales_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div id="clientes_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="comerciales" class="table table-bordered table-striped dataTable dtr-inline"
+                                <table id="clientes" class="table table-bordered table-striped dataTable dtr-inline"
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
@@ -46,7 +44,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">Fecha alta</th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -59,8 +57,8 @@
                                             <th rowspan="1" colspan="1" style="">Direccion</th>
                                             <th rowspan="1" colspan="1" style="">Cuenta Bancaria</th>
                                             <th rowspan="1" colspan="1" style="">Fecha alta</th>
-                                            
-                                         
+
+
 
                                         </tr>
                                     </tfoot>
@@ -102,27 +100,49 @@
 
     <script>
         $(function() {
-            $("#comerciales").DataTable({
-                "ajax" : {
-                   url : "{{ route('datatable.clientes') }}",
-                   dataSrc: 'data'
+
+            let table = $("#clientes").DataTable({
+                dom: 'B<"col-md-6 col-sm-12">frtip',
+                ajax: {
+                    url: "{{ route('datatable.clientes') }}",
+                    dataSrc: 'data'
                 },
-                "columns" : [
-                    {data: 'id'},
-                    {data: 'id_oficina_comercial'},
-                    {data: 'servicio'},
-                    {data: 'sector'},
-                    {data: 'nombre'},
-                    {data: 'direccion'},
-                    {data: 'cuenta_bancaria'},
-                    {data: 'fecha_alta'},
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'id_oficina_comercial'
+                    },
+                    {
+                        data: 'servicio'
+                    },
+                    {
+                        data: 'sector'
+                    },
+                    {
+                        data: 'nombre'
+                    },
+                    {
+                        data: 'direccion'
+                    },
+                    {
+                        data: 'cuenta_bancaria'
+                    },
+                    {
+                        data: 'fecha_alta'
+                    },
                 ],
-
-
-
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#comerciales_wrapper .col-md-6:eq(0)');
-
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                buttons: [
+                    "copy", "csv", "excel", "pdf",
+                ]
+            });
+            
+            
         });
+
+
     </script>
 @endsection
