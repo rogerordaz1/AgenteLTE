@@ -9,7 +9,6 @@
                     <h3 class="card-title">Listado de Clientes</h3>
                     <div id="buttons"></div>
                 </div>
-
                 <div class="card-body">
                     <div id="clientes_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
@@ -20,10 +19,11 @@
                                         <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Id </th>
+                                                aria-label="Rendering engine: activate to sort column descending"> Id
+                                            </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Id OC
+                                                aria-label="Rendering engine: activate to sort column descending"> OC
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
@@ -31,35 +31,36 @@
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Sector</th>
+                                                style="">Sector
+                                            </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Nombre</th>
+                                                style="">Nombre
+                                            </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Direccion</th>
+                                                style="">Direccion
+                                            </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Cuenta Bancaria</th>
+                                                style="">Cuenta Bancaria
+                                            </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Fecha alta</th>
-
+                                                style="">Fecha alta
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th rowspan="1" colspan="1" style="">ID</th>
-                                            <th rowspan="1" colspan="1" style="">Id OC</th>
-                                            <th rowspan="1" colspan="1" style="">Servicio</th>
-                                            <th rowspan="1" colspan="1" style="">Sector</th>
-                                            <th rowspan="1" colspan="1">Nombre</th>
-                                            <th rowspan="1" colspan="1" style="">Direccion</th>
-                                            <th rowspan="1" colspan="1" style="">Cuenta Bancaria</th>
-                                            <th rowspan="1" colspan="1" style="">Fecha alta</th>
-
-
-
+                                            <th rowspan="1" colspan="1" >ID</th>
+                                            <th rowspan="1" colspan="1" >OC</th>
+                                            <th rowspan="1" colspan="1" >Servicio</th>
+                                            <th rowspan="1" colspan="1" >Sector</th>
+                                            <th rowspan="1" colspan="1" >Nombre</th>
+                                            <th rowspan="1" colspan="1" >Direccion</th>
+                                            <th rowspan="1" colspan="1" >Cuenta Bancaria</th>
+                                            <th rowspan="1" colspan="1" >Fecha alta</th>
                                         </tr>
                                     </tfoot>
                                 </table>

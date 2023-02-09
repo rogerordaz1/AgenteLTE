@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Cliente extends Model
 {
     use HasFactory;
-    // protected $fillable = [
-    //     'id',
-    //     'id_oficina_comercial',
-    //     'id_agente',
-    //     'servicio',
-    //     'sector',
-    //     'nombre',
-    //     'direccion',
-    //     'cuenta_bancaria',
-    //     'fecha_alta',
-    // ];
+    protected $fillable = [
+        'id',
+        'id_oficina_comercial',
+        'id_agente',
+        'servicio',
+        'sector',
+        'nombre',
+        'direccion',
+        'cuenta_bancaria',
+        'fecha_alta',
+    ];
 
    
 

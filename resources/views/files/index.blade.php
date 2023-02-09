@@ -13,16 +13,14 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.file.store') }}" enctype="multipart/form-data" id="upload-file" method="POST"> 
+                    <form action="{{ route('dashboard.file.store') }}" enctype="multipart/form-data"  id="upload-file" method="POST"> 
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="file" name="file" id="file" placeholder="ELige el archivo">
+                                    <input type="file" name="file[]" multiple required id="file" placeholder="ELige el archivo">
                                 </div>
                             </div>
-
-
 
                             <div class="col-md-12">
                                 <button  class="btn btn-primary" type="submit">Confirmar</button>
@@ -60,17 +58,4 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
-
-    <script>
-        $(function() {
-            $("#comerciales").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#comerciales_wrapper .col-md-6:eq(0)');
-
-        });
-    </script>
 @endsection

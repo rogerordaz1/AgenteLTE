@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/dashboard/xmlfiles', [XmlFileController::class , 'index'])->name('dashboard.xmlfile');
+
 Route::post('/dashboard/file/store', [XmlFileController::class , 'store'])->name('dashboard.file.store');
 
 
