@@ -14,6 +14,7 @@ class Cliente extends Model
         'id_oficina_comercial',
         'id_agente',
         'servicio',
+        'agrupacion',
         'sector',
         'nombre',
         'direccion',
@@ -34,6 +35,6 @@ class Cliente extends Model
     }
     public function factura()
     {
-        return $this->hasOne(Factura::class , 'servicio_cliente' , 'servicio' );
+        return $this->hasOne(Factura::class , 'servicio_cliente' , 'servicio');
     }
 }

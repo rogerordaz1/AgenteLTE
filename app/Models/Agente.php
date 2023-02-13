@@ -13,6 +13,7 @@ class Agente extends Model
         'id',
         'id_oficina_comercial',
         'servicio',
+        'agrupacion',
         'sector',
         'nombre',
         'direccion',

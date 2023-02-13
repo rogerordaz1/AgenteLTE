@@ -18,23 +18,14 @@ class Factura extends Model
         'no_factura',
         'nombre_cliente',
         'servicio_cliente',
-        'cuota',
-        'LDN',
-        'LDI',
-        'local',
-        'otros',
-        'impuesto',
-        'comision',
-        'facturado',
-        'atrasos',
         'total',
 
     ];
 
     use HasFactory;
 
-    public function clinte()
+    public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'servicio', 'servicio_cliente');
+        return $this->belongsTo(Cliente::class , 'servicio_cliente' , 'servicio');
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_oficina_comercial')->references('id')->on('ocomerciales');
             $table->string('servicio')->unique();
+            $table->string('agrupacion');
             $table->string('sector');
             $table->string('nombre');
             $table->string('direccion');

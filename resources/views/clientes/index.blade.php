@@ -35,6 +35,10 @@
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                style="">Agrupacion
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">Nombre
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
@@ -49,6 +53,7 @@
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">Fecha alta
                                             </th>
+                                          
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -57,10 +62,12 @@
                                             <th rowspan="1" colspan="1" >OC</th>
                                             <th rowspan="1" colspan="1" >Servicio</th>
                                             <th rowspan="1" colspan="1" >Sector</th>
+                                            <th rowspan="1" colspan="1" >Agrupacion</th>
                                             <th rowspan="1" colspan="1" >Nombre</th>
                                             <th rowspan="1" colspan="1" >Direccion</th>
                                             <th rowspan="1" colspan="1" >Cuenta Bancaria</th>
                                             <th rowspan="1" colspan="1" >Fecha alta</th>
+                                         
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -69,6 +76,15 @@
                     </div>
                 </div>
             </div>
+
+            @foreach ($facturas as $item)
+             
+           
+        
+            
+          
+
+            @endforeach
         </div>
     </div>
 @endsection
@@ -108,7 +124,8 @@
                     url: "{{ route('datatable.clientes') }}",
                     dataSrc: 'data'
                 },
-                columns: [{
+                columns: [
+                    {
                         data: 'id'
                     },
                     {
@@ -119,6 +136,9 @@
                     },
                     {
                         data: 'sector'
+                    },
+                    {
+                        data: 'agrupacion'
                     },
                     {
                         data: 'nombre'
@@ -132,6 +152,7 @@
                     {
                         data: 'fecha_alta'
                     },
+                    
                 ],
                 responsive: true,
                 lengthChange: false,

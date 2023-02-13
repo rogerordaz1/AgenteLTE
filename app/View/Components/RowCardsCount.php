@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use App\Models\Agente;
 use App\Models\Cliente;
+use App\Models\Factura;
 use App\Models\Ocomerciale;
 use App\Models\User;
 use Illuminate\View\Component;
@@ -16,6 +17,7 @@ class RowCardsCount extends Component
     public $clientes;
     public $agentes;
     public $ocomerciales;
+    public $facturas;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class RowCardsCount extends Component
         $this->clientes = Cliente::all()->count();
         $this->agentes = Agente::all()->count();
         $this->ocomerciales = Ocomerciale::all()->count();
+        $this->facturas = Factura::all()->count();
     }
 
     /**

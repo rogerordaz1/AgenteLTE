@@ -47,9 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard/xmlfiles', [XmlFileController::class , 'index'])->name('dashboard.xmlfile');
+Route::get('/dashboard/xmlfiles', [XmlFileController::class , 'index'])->middleware(['auth' , 'verified'])->name('dashboard.xmlfile');
 
-Route::post('/dashboard/file/store', [XmlFileController::class , 'store'])->name('dashboard.file.store');
+Route::post('/dashboard/file/clientes', [XmlFileController::class , 'clientes'])->middleware(['auth' , 'verified'])->name('dashboard.file.clientes');
+Route::post('/dashboard/file/facturas', [XmlFileController::class , 'facturas'])->middleware(['auth' , 'verified'])->name('dashboard.file.facturas');
 
 
 Route::get('datatable/clientes', [DatatableController::class , 'clientes'])->name('datatable.clientes');
