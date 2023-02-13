@@ -76,15 +76,6 @@
                     </div>
                 </div>
             </div>
-
-            @foreach ($facturas as $item)
-             
-           
-        
-            
-          
-
-            @endforeach
         </div>
     </div>
 @endsection

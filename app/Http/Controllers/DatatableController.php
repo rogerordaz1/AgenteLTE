@@ -11,10 +11,8 @@ class DatatableController extends Controller
 {
     public function clientes(){
         
-        // return DataTables::of($clientes)
-        // ->addColumn('total',function($clientes){
-        //     return $clientes->factura->total;
-        //   })
-        // ->toJson();
+        return DataTables::of(Cliente::all())
+        
+        ->toJson();
     }
 }
