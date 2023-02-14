@@ -51,6 +51,7 @@ Route::get('/dashboard/xmlfiles', [XmlFileController::class , 'index'])->middlew
 
 Route::post('/dashboard/file/clientes', [XmlFileController::class , 'clientes'])->middleware(['auth' , 'verified'])->name('dashboard.file.clientes');
 Route::post('/dashboard/file/facturas', [XmlFileController::class , 'facturas'])->middleware(['auth' , 'verified'])->name('dashboard.file.facturas');
+Route::post('/dashboard/file/agentes', [XmlFileController::class , 'agentes'])->middleware(['auth' , 'verified'])->name('dashboard.file.agentes');
 
 
 Route::get('datatable/clientes', [DatatableController::class , 'clientes'])->name('datatable.clientes');

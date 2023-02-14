@@ -183,4 +183,29 @@ class XmlFileController extends Controller
             return back();
         }
     }
+
+
+    public function agentes(Request $request){
+
+        $files = $request->file('file');
+
+        foreach ($files as $file) {
+            $nombreArchivo = $file->getClientOriginalName();
+                $array = explode('.', $nombreArchivo);
+                $ext = end($array);
+                if ($ext == 'xml' || $ext == 'xsd') {
+                    if (Storage::putFileAs('/public/files',  $file, $nombreArchivo)) {
+                        $agentesXML  =  simplexml_load_file($file);
+                        $agentesJson = json_encode($agentesXML);
+                        $agentesArray = json_decode($agentesJson, true);
+
+                        
+                    }
+                }
+
+           
+        }
+
+    }
+
 }
