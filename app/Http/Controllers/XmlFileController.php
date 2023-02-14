@@ -95,7 +95,6 @@ class XmlFileController extends Controller
 
     public function facturas(Request $request)
     {
-
         // $validated = $request->validate([
         //     'file' => 'required|mimes:xml,xsd|max:2048'
         // ]);
@@ -110,15 +109,16 @@ class XmlFileController extends Controller
                 $nombreArchivo = $file->getClientOriginalName();
                 $array = explode('.', $nombreArchivo);
                 $ext = end($array);
-                $fileExists  = file_exists(public_path('/storage/files/' . $nombreArchivo));
+
                 if ($ext == 'xml' || $ext == 'xsd') {
                     if (Storage::putFileAs('/public/files',  $file, $nombreArchivo)) {
-                        // if ($fileExists == false) {
+
                         $facturasXML  =  simplexml_load_file($file);
                         $facturasJson = json_encode($facturasXML);
                         $facturasArray = json_decode($facturasJson, true);
 
                         $facturasArrayToDB = [];
+
                         foreach ($facturasArray['ROW'] as $factura1) {
                             if ($factura1['SECTOR'] != 'RT') {
 
@@ -138,13 +138,10 @@ class XmlFileController extends Controller
                                     $floatTotal = floatval($item['TOTAL']);
                                     $total = $total + $floatTotal;
                                 }
-                                if (in_array($servicio, $facturasArrayToDB)) {
-                                    var_dump("al menos encontro un servicio");
-                                }
+                                $cliente = Cliente::where('servicio', $servicio)->get();
+                                if ($cliente->count() == 1) {
 
-
-                                $facturasArrayToDB[] =
-                                    [
+                                    Factura::firstOrCreate([
                                         'oficina'          => gettype($factura1['OFICINA']) == 'array' ? '' : $factura1['OFICINA'],
                                         'agrupacion'       => gettype($factura1['AGRUPACION']) == 'array' ? '' : $factura1['AGRUPACION'],
                                         'cuenta'           => gettype($factura1['CUENTA']) == 'array' ? '' : $factura1['CUENTA'],
@@ -152,12 +149,14 @@ class XmlFileController extends Controller
                                         'nombre_cliente'   => gettype($factura1['NOMBRE']) == 'array' ? '' : $factura1['NOMBRE'],
                                         'servicio_cliente' => gettype($servicio) == 'array' ? '' : $servicio,
                                         'total'            => $total,
-                                    ];
+                                    ]);
+                                }
                             }
                         }
-                        
+
+
                         // try {
-                        Factura::insert($facturasArrayToDB);
+                        //Factura::insert($facturasArrayToDB);
                         // } catch (\Throwable $th) {
                         //     Alert::error('Error', 'Ya existe una factura con ese id en el archivo: ' . $nombreArchivo);
                         //     unlink(public_path('/storage/files/' . $nombreArchivo));
