@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_oficina_comercial')->references('id')->on('ocomerciales');
+            $table->foreignId('id_agente')->nullable()->references('id')->on('agentes');
             $table->string('servicio')->unique();
             $table->string('agrupacion');
             $table->string('sector');

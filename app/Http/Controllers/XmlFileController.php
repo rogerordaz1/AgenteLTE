@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use SimpleCSV;
+use App\Models\Agente;
 use App\Models\Cliente;
 use App\Models\Factura;
+
+
+
 use App\Models\XmlFile;
+use Shuchkin\SimpleXLS;
+use Shuchkin\SimpleXLSX;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -25,7 +33,7 @@ class XmlFileController extends Controller
         // $validated = $request->validate([
         //     'file' => 'required|mimes:xml,xsd|max:2048'
         // ]);
-        $max_size = (int)ini_get('upload_max_filesize') * 10240;
+
 
         $files = $request->file('file');
 
@@ -61,8 +69,13 @@ class XmlFileController extends Controller
                                 ]);
                             }
                         }
-                        try {
-                            Cliente::insert($clientesArray);
+                         try {
+                        $chunked_new_record_array = array_chunk($clientesArray, 6500, true);
+
+                        foreach ($chunked_new_record_array as $new_record_chunk) {
+                            Cliente::insert($new_record_chunk);
+                        }
+
                         } catch (\Throwable $th) {
                             Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
                             unlink(public_path('/storage/files/' . $nombreArchivo));
@@ -98,7 +111,7 @@ class XmlFileController extends Controller
         // $validated = $request->validate([
         //     'file' => 'required|mimes:xml,xsd|max:2048'
         // ]);
-        // $max_size = (int)ini_get('upload_max_filesize') * 10240;
+         $max_size = (int)ini_get('upload_max_filesize') * 10240;
 
         $files = $request->file('file');
 
@@ -185,27 +198,57 @@ class XmlFileController extends Controller
     }
 
 
-    public function agentes(Request $request){
+    public function agentes(Request $request)
+    {
 
         $files = $request->file('file');
-
-        foreach ($files as $file) {
-            $nombreArchivo = $file->getClientOriginalName();
+        if ($request->hasFile('file')) {
+            foreach ($files as $file) {
+                $nombreArchivo = $file->getClientOriginalName();
                 $array = explode('.', $nombreArchivo);
                 $ext = end($array);
-                if ($ext == 'xml' || $ext == 'xsd') {
-                    if (Storage::putFileAs('/public/files',  $file, $nombreArchivo)) {
-                        $agentesXML  =  simplexml_load_file($file);
-                        $agentesJson = json_encode($agentesXML);
-                        $agentesArray = json_decode($agentesJson, true);
+                if ($ext == 'xlsx') {
+                    if ($xls = SimpleXLSX::parse($file)) {
+                        $array =  $xls->rows();
+                        array_splice($array, 0, 3);
+                        foreach ($array as $item) {
+                            $id_oficina_comercial =  $item[5];
+                            trim($id_oficina_comercial);
+                            $id_oficina = substr($id_oficina_comercial, 1, 2);
+                            // print_r($id_oficina);
 
-                        
+
+                            // print_r($id_oficina_comercial);
+                            $agente = Agente::firstOrCreate([
+                                'id_oficina_comercial' => $id_oficina,
+                                'nombre' => $item[7],
+                            ]);
+                            try {
+                                $cliente  =  Cliente::where('servicio', $item[4])->firstOrFail();
+                            } catch (\Throwable $th) {
+                                toast('Hay clientes que pagan servicios de otras provincias','info');
+                            }
+                            //->update([
+                                //     'id_agente' => $agente->id,
+                                // ]);
+                                
+                             
+                        }
+                    } else {
+                        echo SimpleXLS::parseError();
                     }
+                } else {
+                    Alert::error('Error', 'EL archivo seleccionado no es un xls: ' . $nombreArchivo);
+                    return back();
                 }
-
-           
+            }
+            Alert::success('Subido', 'Los achivos se han subido correctamente');
+            return back();
+        } else {
+            Alert::error('Error', 'Debe subir al menos 1 archivo');
+            return back();
         }
-
     }
-
 }
+
+// Array ( [0] => SECTOR [1] => IMPORTE FACTURADO [2] => C.IDENT. [3] => MONEDA [4] => NOMBRE SERVICIO [5] => DESCRIPCION [6] => IMPORTE COBRADO [7] => CLIENTE [8] => IMPORTE COMISION 

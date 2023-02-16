@@ -16,11 +16,7 @@ return new class extends Migration
         Schema::create('agentes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_oficina_comercial')->references('id')->on('ocomerciales');
-            $table->string('servicio');
             $table->string('nombre');
-            $table->string('direccion');
-            $table->string('cuenta_bancaria');
-            $table->date('fecha_alta');
             $table->timestamps();
         });
     }

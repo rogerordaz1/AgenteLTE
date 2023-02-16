@@ -26,6 +26,6 @@ class Agente extends Model
     }
 
     public function clientes(){
-        return $this->hasMany(Cliente::class);
+        return $this->hasMany(Cliente::class , 'id' , 'id_agente');
     }
 }
