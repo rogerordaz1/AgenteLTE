@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('cuenta');
             $table->string('no_factura');
             $table->string('nombre_cliente');
-            $table->string('servicio_cliente');
+            $table->string('servicio_cliente')->nullable();
             $table->foreign('servicio_cliente')->references('servicio')->on('clientes');
             $table->float('total');
             $table->timestamps();
