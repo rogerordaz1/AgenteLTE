@@ -81,7 +81,9 @@ class XmlFileController extends Controller
                         } catch (\Throwable $th) {
                             Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
                             unlink(public_path('/storage/files/' . $nombreArchivo));
-                            return back();
+                            return response()->json([
+                                'mensaje' => 'Ya existe un usuario con ese id en el archivo',
+                            ]);
                         }
 
 
@@ -95,13 +97,20 @@ class XmlFileController extends Controller
                 } else {
                     Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
                     return back();
+                    // return response()->json([
+                    //     'mensaje' => 'EL archivo seleccionado no es un xml o xsd',
+                    // ]);
                 }
             }
             Alert::success('Subido', 'Los achivos se han subido correctamente');
-            return back();
+            return response()->json([
+                'mensaje' => 'Los achivos se han subido correctamente',
+            ]);
         } else {
             Alert::error('Error', 'Debe subir al menos 1 archivo');
-            return back();
+            return response()->json([
+                'mensaje' => 'Debe subir al menos 1 archivo',
+            ]);
         }
     }
 
@@ -205,91 +214,89 @@ class XmlFileController extends Controller
     {
         $files = $request->file('file');
 
-        if ($request->hasFile('file')) {
+        if (!$request->hasFile('file')) {
+            Alert::error('Error', 'Debe subir al menos 1 archivo');
+            return back();
+        }
+        foreach ($files as $file) {
 
-            foreach ($files as $file) {
+            $nombreArchivo = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
 
-                $nombreArchivo = $file->getClientOriginalName();
-                $ext = $file->getClientOriginalExtension();
-
-                if (!in_array($ext, ['xml', 'xsd'])) {
-                    Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                    return back();
+            if (!in_array($ext, ['xml', 'xsd'])) {
+                Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
+                return back();
+            }
+            if (!Storage::putFileAs('/public/files', $file, $nombreArchivo)) {
+                Alert::error('Error', 'No se pudo guardar el archivo: ' . $nombreArchivo);
+                return back();
+            }
+            $facturasXML  =  simplexml_load_file($file);
+            $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
+            $facturasArrayToDB = [];
+            sort($facturasArray);
+            for ($i = 0; $i < count($facturasArray); $i++) {
+                $indice = 0;
+                if ($facturasArray[$i]['SECTOR'] == 'RT') {
+                    continue;
                 }
-                if (!Storage::putFileAs('/public/files', $file, $nombreArchivo)) {
-                    Alert::error('Error', 'No se pudo guardar el archivo: ' . $nombreArchivo);
-                    return back();
-                }
-                $facturasXML  =  simplexml_load_file($file);
-                $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
-                $facturasArrayToDB = [];
-                sort($facturasArray);
-                for ($i = 0; $i < count($facturasArray); $i++) {
-                    $indice = 0;
-                    if ($facturasArray[$i]['SECTOR'] == 'RT') {
-                        continue;
+                $agrupacion = [];
+                for ($j = $i; $j < count($facturasArray); $j++) {
+                    if ($facturasArray[$i]['AGRUPACION'] == $facturasArray[$j]['AGRUPACION']) {
+                        array_push($agrupacion, $facturasArray[$j]);
+                        $indice++;
+                    } else {
+                        $i += $indice - 1;
+                        break;
                     }
-                    $agrupacion = [];
-                    for ($j = $i; $j < count($facturasArray); $j++) {
-                        if ($facturasArray[$i]['AGRUPACION'] == $facturasArray[$j]['AGRUPACION']) {
-                            array_push($agrupacion, $facturasArray[$j]);
-                            $indice++;
-                        } else {
-                            $i += $indice - 1;
-                            break;
+                }
+                $servicio = '';
+                $total = array_sum(array_column($agrupacion, 'TOTAL'));
+                foreach ($agrupacion as $item) {
+                    if (isset($item['SERVICIO']) && !empty($item['SERVICIO'])) {
+                        if ($item['ACTIVO'] == "T" || $item['ACTIVO'] == "F") {
+                            continue;
                         }
+                        $servicio = $item['SERVICIO'] ?? null;
                     }
-                    $servicio = '';
-                    $total = array_sum(array_column($agrupacion, 'TOTAL'));
-                    foreach ($agrupacion as $item) {
-                        if (isset($item['SERVICIO']) && !empty($item['SERVICIO'])) {
-                            if ($item['ACTIVO'] == "T" || $item['ACTIVO'] == "F") {
-                                continue;
-                            }
-                            $servicio = $item['SERVICIO'] ?? null;
-                        }
-                    }
-                    if ($servicio == '') {
-                        continue;
-                    }
-                    array_push($facturasArrayToDB,  [
-                        'oficina'          => gettype($facturasArray[$i]['OFICINA'])    == 'array' ? '' : $facturasArray[$i]['OFICINA'],
-                        'agrupacion'       => gettype($facturasArray[$i]['AGRUPACION']) == 'array' ? '' : $facturasArray[$i]['AGRUPACION'],
-                        'cuenta'           => gettype($facturasArray[$i]['CUENTA'])     == 'array' ? '' : $facturasArray[$i]['CUENTA'],
-                        'no_factura'       => gettype($facturasArray[$i]['NO_FACTURA']) == 'array' ? '' : $facturasArray[$i]['NO_FACTURA'],
-                        'nombre_cliente'   => gettype($facturasArray[$i]['NOMBRE'])     == 'array' ? '' : $facturasArray[$i]['NOMBRE'],
-                        'servicio_cliente' => $servicio,
-                        'total'            => $total,
-                    ]);
                 }
-                $facturasArrayToDBNODUPL = array_unique($facturasArrayToDB, SORT_REGULAR);
-                 try {
+                if ($servicio == '') {
+                    continue;
+                }
+                array_push($facturasArrayToDB,  [
+                    'oficina'          => gettype($facturasArray[$i]['OFICINA'])    == 'array' ? '' : $facturasArray[$i]['OFICINA'],
+                    'agrupacion'       => gettype($facturasArray[$i]['AGRUPACION']) == 'array' ? '' : $facturasArray[$i]['AGRUPACION'],
+                    'cuenta'           => gettype($facturasArray[$i]['CUENTA'])     == 'array' ? '' : $facturasArray[$i]['CUENTA'],
+                    'no_factura'       => gettype($facturasArray[$i]['NO_FACTURA']) == 'array' ? '' : $facturasArray[$i]['NO_FACTURA'],
+                    'nombre_cliente'   => gettype($facturasArray[$i]['NOMBRE'])     == 'array' ? '' : $facturasArray[$i]['NOMBRE'],
+                    'servicio_cliente' => $servicio,
+                    'total'            => $total,
+                ]);
+            }
+            $facturasArrayToDBNODUPL = array_unique($facturasArrayToDB, SORT_REGULAR);
+            try {
                 $chunked_new_record_array = array_chunk($facturasArrayToDBNODUPL, 3000, true);
 
                 foreach ($chunked_new_record_array as $new_record_chunk) {
                     Factura::insert($new_record_chunk);
                 }
-                 } catch (\Throwable $th) {
-                    Alert::error('Error', 'Ocurrio un error a la hora de guardar en la base de datos ' . $nombreArchivo);
-                    unlink(public_path('/storage/files/' . $nombreArchivo));
-                    return back();
-                 }
-
-
-                XmlFile::create([
-                    'name' => $nombreArchivo,
-                ]);
-                
-
+            } catch (\Throwable $th) {
+                Alert::error('Error', 'Ocurrio un error a la hora de guardar en la base de datos ' . $nombreArchivo);
                 unlink(public_path('/storage/files/' . $nombreArchivo));
+                return back();
             }
 
-            Alert::success('Subido', 'Los achivos se han subido correctamente');
-            return back();
-        } else {
-            Alert::error('Error', 'Debe subir al menos 1 archivo');
-            return back();
+
+            XmlFile::create([
+                'name' => $nombreArchivo,
+            ]);
+
+
+            unlink(public_path('/storage/files/' . $nombreArchivo));
         }
+
+        Alert::success('Subido', 'Los achivos se han subido correctamente');
+        return back();
     }
 
 
@@ -403,14 +410,16 @@ class XmlFileController extends Controller
                                 'id_oficina_comercial' => $id_oficina,
                                 'nombre' => $item[7],
                             ]);
-                            try {
-                                $cliente  =  Cliente::where('servicio', $item[4])->firstOrFail();
-                            } catch (\Throwable $th) {
-                                toast('Hay clientes que pagan servicios de otras provincias', 'info');
-                            }
-                            //->update([
-                            //     'id_agente' => $agente->id,
-                            // ]);
+                         
+                               
+                                $cliente  =  Cliente::where('servicio', $item[4])->first();
+
+                                if (!empty($cliente)) {
+                                    $cliente->id_agente = $agente->id;
+                                    $cliente->save();
+                                } else {
+                                   
+                                }
 
 
                         }

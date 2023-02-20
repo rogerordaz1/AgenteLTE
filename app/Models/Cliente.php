@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Agente;
 use App\Models\Factura;
+use App\Models\Ocomerciale;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,12 +28,12 @@ class Cliente extends Model
 
     public function ocomercial()
     {
-        return $this->belongsTo(Ocomerciale::class);
+        return $this->belongsTo(Ocomerciale::class , 'id_oficina_comercial');
     }
 
     public function agente()
     {
-        return $this->belongsTo(Agente::class, 'id_agente', 'id');
+        return $this->belongsTo(Agente::class , 'id_agente');
     }
     public function factura()
     {

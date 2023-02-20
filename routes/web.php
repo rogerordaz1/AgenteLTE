@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AgenteController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\XmlFileController;
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DatatableController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\OcomercialeController;
 
 /*
@@ -36,6 +37,9 @@ Route::resource('/dashboard/ocomerciales', OcomercialeController::class)
 Route::resource('/dashboard/clientes', ClienteController::class)
 ->middleware(['auth' , 'verified'])->names('dashboard.clientes');
 
+Route::resource('/dashboard/agentes', AgenteController::class)
+->middleware(['auth' , 'verified'])->names('dashboard.agentes');
+
 
 Route::get('/dashboard', function () {
     return view('panel_admin');
@@ -55,6 +59,8 @@ Route::post('/dashboard/file/agentes', [XmlFileController::class , 'agentes'])->
 
 
 Route::get('datatable/clientes', [DatatableController::class , 'clientes'])->name('datatable.clientes');
+Route::get('datatable/agentes', [DatatableController::class , 'agentes'])->name('datatable.agentes');
+Route::get('datatable/clientes-agente/{agente}', [DatatableController::class , 'clientes_agente'])->name('datatable.cliente-agente');
 
 
 

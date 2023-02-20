@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Cliente;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Agente extends Model
 {
@@ -26,6 +27,6 @@ class Agente extends Model
     }
 
     public function clientes(){
-        return $this->hasMany(Cliente::class , 'id' , 'id_agente');
+        return $this->hasMany(Cliente::class , 'id_agente');
     }
 }

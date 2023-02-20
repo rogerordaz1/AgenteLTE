@@ -6,14 +6,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Listado de Facturas de los Clientes</h3>
+                    <h3 class="card-title">Facturas de los clientes de : {{ $agente->nombre }}</h3>
                     <div id="buttons"></div>
                 </div>
                 <div class="card-body">
-                    <div id="clientes_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div id="clientes-agente_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="clientes" class="table table-bordered table-striped dataTable dtr-inline"
+                                <table id="clientes-agente" class="table table-bordered table-striped dataTable dtr-inline"
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
@@ -99,10 +99,10 @@
     <script>
         $(function() {
 
-            let table = $("#clientes").DataTable({
+            let table = $("#clientes-agente").DataTable({
                 dom: 'B<"col-md-6 col-sm-12">frtip',
                 ajax: {
-                    url: "{{ route('datatable.clientes') }}",
+                    url: "{{ route('datatable.cliente-agente' , $agente) }}",
                     dataSrc: 'data'
                 },
                 columns: [

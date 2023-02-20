@@ -6,17 +6,21 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Listado de Facturas de los Clientes</h3>
+                    <h3 class="card-title">Listado de Agentes</h3>
                     <div id="buttons"></div>
                 </div>
                 <div class="card-body">
-                    <div id="clientes_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div id="agentes_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="clientes" class="table table-bordered table-striped dataTable dtr-inline"
+                                <table id="agentes" class="table table-bordered table-striped dataTable dtr-inline"
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending"> ID
+                                            </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending"> Oficina
@@ -27,37 +31,29 @@
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Agrupacion
+                                                aria-label="Rendering engine: activate to sort column descending"> Creado
                                             </th>
-                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                                colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Cuenta
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending"> Modificado
                                             </th>
-                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                                colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">#Factura
-                                            </th>
-                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                                colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">Servicio
-                                            </th>
-                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                                colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">TOTAL
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending"> Ver Clientes
                                             </th>
                                             
-                                          
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th rowspan="1" colspan="1" >ID</th>
                                             <th rowspan="1" colspan="1" >Oficina</th>
                                             <th rowspan="1" colspan="1" >Nombre</th>
-                                            <th rowspan="1" colspan="1" >Agrupacion</th>
-                                            <th rowspan="1" colspan="1" >Cuenta</th>
-                                            <th rowspan="1" colspan="1" >#Factura</th>
-                                            <th rowspan="1" colspan="1" >Servicio</th>
-                                            <th rowspan="1" colspan="1" >TOTAL</th>                                     
+                                            <th rowspan="1" colspan="1" >Creado</th>
+                                            <th rowspan="1" colspan="1" >Modificado</th>
+                                            <th rowspan="1" colspan="1" >Ver Clientes</th>
+                                            
+                                                                              
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -99,36 +95,33 @@
     <script>
         $(function() {
 
-            let table = $("#clientes").DataTable({
+            let table = $("#agentes").DataTable({
                 dom: 'B<"col-md-6 col-sm-12">frtip',
                 ajax: {
-                    url: "{{ route('datatable.clientes') }}",
+                    url: "{{ route('datatable.agentes') }}",
                     dataSrc: 'data'
                 },
                 columns: [
                     {
-                        data: 'oficina'
+                        data: 'id'
                     },
                     {
-                        data: 'nombre_cliente'
+                        data: 'id_oficina_comercial'
                     },
                     {
-                        data: 'agrupacion'
+                        data: 'nombre'
                     },
                     {
-                        data: 'cuenta'
+                        data: 'created_at'
                     },
                     {
-                        data: 'no_factura'
-                    },
-                    
+                        data: 'updated_at'
+                    },  
                     {
-                        data: 'servicio_cliente'
-                    },
-                    {
-                        data: 'total'
-                    },    
+                        data: 'show_clients'
+                    },  
                 ],
+                serverside: true,
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,

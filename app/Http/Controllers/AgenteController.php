@@ -2,56 +2,54 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Cliente;
-use App\Models\Factura;
+use App\Models\Agente;
 use Illuminate\Http\Request;
 
-class ClienteController extends Controller
+class AgenteController extends Controller
 {
-   
+
     public function index()
     {
-      
-       
-       return view('clientes.index');
-      
+        return view('agentes.index');
     }
 
-   
+
     public function create()
     {
         //
     }
 
-   
+
     public function store(Request $request)
     {
         //
     }
 
+
     public function show($id)
     {
-        $cliente = Cliente::find($id);
-        
-        return view('clientes.show' , [ 
-            'cliente' => $cliente
-        ]);
+        $agente = Agente::find($id);
+        return view(
+            'agentes.show_clientes',
+            [
+                'agente' => $agente,
+            ]
+        );
     }
 
-   
+
     public function edit($id)
     {
         //
     }
 
-   
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    
+
     public function destroy($id)
     {
         //
