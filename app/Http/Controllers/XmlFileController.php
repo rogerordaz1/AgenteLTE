@@ -6,9 +6,7 @@ use SimpleCSV;
 use App\Models\Agente;
 use App\Models\Cliente;
 use App\Models\Factura;
-
-
-
+use App\Models\NAgredado;
 use App\Models\XmlFile;
 use Shuchkin\SimpleXLS;
 use Shuchkin\SimpleXLSX;
@@ -81,9 +79,10 @@ class XmlFileController extends Controller
                         } catch (\Throwable $th) {
                             Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
                             unlink(public_path('/storage/files/' . $nombreArchivo));
-                            return response()->json([
-                                'mensaje' => 'Ya existe un usuario con ese id en el archivo',
-                            ]);
+                            // return response()->json([
+                            //     'mensaje' => 'Ya existe un usuario con ese id en el archivo',
+                            // ]);
+                            return back();
                         }
 
 
@@ -103,14 +102,16 @@ class XmlFileController extends Controller
                 }
             }
             Alert::success('Subido', 'Los achivos se han subido correctamente');
-            return response()->json([
-                'mensaje' => 'Los achivos se han subido correctamente',
-            ]);
+            // return response()->json([
+            //     'mensaje' => 'Los achivos se han subido correctamente',
+            // ]);
+            return back();
         } else {
             Alert::error('Error', 'Debe subir al menos 1 archivo');
-            return response()->json([
-                'mensaje' => 'Debe subir al menos 1 archivo',
-            ]);
+            return back();
+            // return response()->json([
+            //     'mensaje' => 'Debe subir al menos 1 archivo',
+            // ]);
         }
     }
 
@@ -418,7 +419,12 @@ class XmlFileController extends Controller
                                     $cliente->id_agente = $agente->id;
                                     $cliente->save();
                                 } else {
-                                   
+                                   //salvar en la base de datos los clientes que no existan en la base de datos
+                                    NAgredado::create([
+                                        'id_agente' => $agente->id,
+                                        'servicio' => $item[4],
+                                    ]);
+
                                 }
 
 

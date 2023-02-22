@@ -27,7 +27,8 @@
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Agrupacion
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                Agrupacion
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
@@ -45,20 +46,21 @@
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">TOTAL
                                             </th>
-                                            
-                                          
+
+
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th rowspan="1" colspan="1" >Oficina</th>
-                                            <th rowspan="1" colspan="1" >Nombre</th>
-                                            <th rowspan="1" colspan="1" >Agrupacion</th>
-                                            <th rowspan="1" colspan="1" >Cuenta</th>
-                                            <th rowspan="1" colspan="1" >#Factura</th>
-                                            <th rowspan="1" colspan="1" >Servicio</th>
-                                            <th rowspan="1" colspan="1" >TOTAL</th>                                     
+                                            <th rowspan="1" colspan="1">Oficina</th>
+                                            <th rowspan="1" colspan="1">Nombre</th>
+                                            <th rowspan="1" colspan="1">Agrupacion</th>
+                                            <th rowspan="1" colspan="1">Cuenta</th>
+                                            <th rowspan="1" colspan="1">#Factura</th>
+                                            <th rowspan="1" colspan="1">Servicio</th>
+                                            <th rowspan="1" colspan="1">TOTAL</th>
                                         </tr>
+                                        
                                     </tfoot>
                                 </table>
                             </div>
@@ -68,6 +70,67 @@
             </div>
         </div>
     </div>
+
+    @if ($agente->nagregados->isNotEmpty())
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Numeros de otras provincias del agente : {{ $agente->nombre }}</h3>
+                        <div id="buttons"></div>
+                    </div>
+                    <div class="card-body">
+                        <div id="nagregados_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="nagregados" class="table table-bordered table-striped dataTable dtr-inline"
+                                        aria-describedby="example1_info">
+                                        <thead>
+                                            <tr>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    Nombre
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                    colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                    style="">Agente
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Browser: activate to sort column ascending"
+                                                    style="">#Servicio
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($agente->nagregados as $nagregado)
+                                                <td style="">{{ $nagregado->nombre }}</td>
+                                                <td style="">{{ $agente->nombre }}</td>
+                                                <td style="">{{ $nagregado->servicio }}</td>
+                                            @endforeach
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+
+                                                <th rowspan="1" colspan="1">Nombre</th>
+                                                <th rowspan="1" colspan="1">Agente</th>
+                                                <th rowspan="1" colspan="1">$Servicio</th>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
 @endsection
 
 
@@ -98,15 +161,13 @@
 
     <script>
         $(function() {
-
             let table = $("#clientes-agente").DataTable({
                 dom: 'B<"col-md-6 col-sm-12">frtip',
                 ajax: {
-                    url: "{{ route('datatable.cliente-agente' , $agente) }}",
+                    url: "{{ route('datatable.cliente-agente', $agente) }}",
                     dataSrc: 'data'
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'oficina'
                     },
                     {
@@ -121,13 +182,13 @@
                     {
                         data: 'no_factura'
                     },
-                    
+
                     {
                         data: 'servicio_cliente'
                     },
                     {
                         data: 'total'
-                    },    
+                    },
                 ],
                 responsive: true,
                 lengthChange: false,
@@ -136,10 +197,15 @@
                     "copy", "csv", "excel", "pdf",
                 ]
             });
-            
-            
+
+
         });
 
-
+        $("#nagregados").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#nagregados_wrapper .col-md-6:eq(0)');
     </script>
 @endsection

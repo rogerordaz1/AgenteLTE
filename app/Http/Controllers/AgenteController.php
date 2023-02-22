@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agente;
+use App\Models\Ocomerciale;
 use Illuminate\Http\Request;
 
 class AgenteController extends Controller
@@ -10,7 +11,11 @@ class AgenteController extends Controller
 
     public function index()
     {
-        return view('agentes.index');
+        $ocomerciales = Ocomerciale::all();
+        // $ocomercialesNombres = $ocomerciales->sortBy('nombre')->pluck('nombre')->unique();
+        return view('agentes.index', [
+            'ocomerciales' => $ocomerciales
+        ]);
     }
 
 

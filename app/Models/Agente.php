@@ -23,10 +23,15 @@ class Agente extends Model
     ];
 
     public function ocomercial(){
-        return $this->belongsTo(Ocomerciale::class);
+        return $this->belongsTo(Ocomerciale::class , 'id_oficina_comercial');
     }
 
     public function clientes(){
         return $this->hasMany(Cliente::class , 'id_agente');
     }
+
+    public function nagregados(){
+        return $this->hasMany(NAgredado::class , 'id_agente');
+    }
+
 }

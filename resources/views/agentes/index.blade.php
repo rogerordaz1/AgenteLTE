@@ -17,6 +17,22 @@
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
+                                            <td>
+                                              
+                                                <select data-column="1" class="form-control filter-input" id="filtro">
+                                                    <option value="">Seleciona la Oficina</option>
+                                                    @foreach ($ocomerciales as $oficina)
+                                                    <option value="{{ $oficina->nombre }}"> {{ $oficina->nombre }} </option>   
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending"> ID
@@ -43,6 +59,7 @@
                                             </th>
                                             
                                         </tr>
+                                        
                                     </thead>
                                     <tfoot>
                                         <tr>
@@ -51,9 +68,7 @@
                                             <th rowspan="1" colspan="1" >Nombre</th>
                                             <th rowspan="1" colspan="1" >Creado</th>
                                             <th rowspan="1" colspan="1" >Modificado</th>
-                                            <th rowspan="1" colspan="1" >Ver Clientes</th>
-                                            
-                                                                              
+                                            <th rowspan="1" colspan="1" >Ver Clientes</th>                                
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -106,7 +121,7 @@
                         data: 'id'
                     },
                     {
-                        data: 'id_oficina_comercial'
+                        data: 'oficina_nombre'
                     },
                     {
                         data: 'nombre'
@@ -130,7 +145,13 @@
                 ]
             });
             
-            
+
+
+            $('#filtro').change(function(){
+                table.column($(this).data('column'))
+                .search($(this).val())
+                .draw();
+            });
         });
 
 
