@@ -45,8 +45,8 @@
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">TOTAL
                                             </th>
-                                            
-                                          
+
+
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -57,7 +57,7 @@
                                             <th rowspan="1" colspan="1" >Cuenta</th>
                                             <th rowspan="1" colspan="1" >#Factura</th>
                                             <th rowspan="1" colspan="1" >Servicio</th>
-                                            <th rowspan="1" colspan="1" >TOTAL</th>                                     
+                                            <th rowspan="1" colspan="1" >TOTAL</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -121,23 +121,24 @@
                     {
                         data: 'no_factura'
                     },
-                    
+
                     {
                         data: 'servicio_cliente'
                     },
                     {
                         data: 'total'
-                    },    
+                    },
                 ],
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
                 buttons: [
                     "copy", "csv", "excel", "pdf",
+
                 ]
             });
-            
-            
+
+
         });
 
 

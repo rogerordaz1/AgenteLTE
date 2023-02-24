@@ -62,6 +62,9 @@ Route::get('datatable/clientes', [DatatableController::class , 'clientes'])->nam
 Route::get('datatable/agentes', [DatatableController::class , 'agentes'])->name('datatable.agentes');
 Route::get('datatable/clientes-agente/{agente}', [DatatableController::class , 'clientes_agente'])->name('datatable.cliente-agente');
 
+Route::get('dashboard/select/clientes', [AgenteController::class , 'selectClientes'])->name('dashboard.select.clientes');
+
+
 
 
 require __DIR__.'/auth.php';

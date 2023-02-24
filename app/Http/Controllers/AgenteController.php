@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agente;
+use App\Models\Cliente;
 use App\Models\Ocomerciale;
 use Illuminate\Http\Request;
 
@@ -41,17 +42,38 @@ class AgenteController extends Controller
             ]
         );
     }
+    public function selectClientes(Request $request)
+{
+    $servicio = $request->input('servicio');
 
+    $clientes = Cliente::where('servicio', 'like', '%' . $servicio . '%')->limit(50)->get();
 
-    public function edit($id)
+    return response()->json(['results' => $clientes]);
+}
+
+    public function edit(Agente $agente)
     {
-        //
+
+        // $clientes = Cliente::get(['id','nombre','servicio'])->paginate(50);
+        $clientes = Cliente::paginate(50);
+        return view(
+            'agentes.edit',
+            [
+                'agente' => $agente,
+                'clientes' =>$clientes
+            ]
+        );
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Agente $agente)
     {
-        //
+        $cliente = Cliente::where('id' , $request->get('servicio'))->first();
+        $cliente->id_agente = $agente->id;
+        $cliente->save();
+        toast('Has adicionado el servicio: ' . $cliente->servicio .' al agente ' .$agente->nombre,'success');
+        return redirect(route('dashboard.agentes.show', $agente));
+
     }
 
 

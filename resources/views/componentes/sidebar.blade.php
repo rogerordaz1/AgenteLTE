@@ -35,14 +35,14 @@
 
              <li class="nav-item">
                 <a href="{{ route('dashboard') }}"
-                    class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}"> 
-                    <i class="nav-icon fab fa-teamspeak"></i>                   
+                    class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <i class="nav-icon fab fa-teamspeak"></i>
                     <p>
                         Panel de Control
                         {{-- <span class="right badge badge-danger">New</span> --}}
                     </p>
                 </a>
-            </li>     
+            </li>
         <li class="nav-item  {{ request()->is('user/profile') ? 'menu-open' : 'menu-close' }}">
             <a href="#" class="nav-link {{ 'user/profile' == request()->path() ? 'active' : '' }}">
                 <i class="mr-2 fas fa-solid fa-clipboard"></i>
@@ -55,7 +55,7 @@
                 <li class="nav-item">
                     <a href="/user/profile"
                         class="nav-link {{ request()->is('/user/profile') ? 'active' : '' }}
-                        
+
                         ">
 
                         <i class="fas fa-solid fa-address-card"></i>
@@ -124,7 +124,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('dashboard.agentes.index') }}" class="nav-link">
+            <a href="{{ route('dashboard.agentes.index') }}"
+             class="nav-link {{ request()->is('dashboard/agentes') || request()->is('dashboard/agentes/*') ? 'active' : '' }}">
                 {{-- <i class="nav-icon fas fa-th"></i> --}}
 
                 <i class="nav-icon fas fa-user-tag"></i>
@@ -136,7 +137,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('dashboard.clientes.index') }}" 
+            <a href="{{ route('dashboard.clientes.index') }}"
             class="nav-link {{ request()->is('dashboard/clientes') || request()->is('dashboard/clientes/*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-user"></i>
                 <p>

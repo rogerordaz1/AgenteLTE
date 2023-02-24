@@ -11,4 +11,9 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    resolve: {
+        alias: { // Agrega esta línea
+            'select2': 'select2/dist/js/select2.js' // Agrega esta línea
+        }
+    }
 });

@@ -28,189 +28,70 @@ class XmlFileController extends Controller
 
     public function clientes(Request $request)
     {
-
-        // $validated = $request->validate([
-        //     'file' => 'required|mimes:xml,xsd|max:2048'
-        // ]);
-
+        //  Hacer la funcion manual de eliminar el cliente....
 
         $files = $request->file('file');
 
-        if ($request->hasFile('file')) {
-
-            foreach ($files as $file) {
-
-                $nombreArchivo = $file->getClientOriginalName();
-                $ext = $file->getClientOriginalExtension();
-
-                $fileExists  = file_exists(public_path('/storage/files/' . $nombreArchivo));
-                if ($ext == 'xml' || $ext == 'xsd') {
-
-                    if (Storage::putFileAs('/public/files',  $file, $nombreArchivo)) {
-                        // if ($fileExists == false) {
-
-                        $clientesXML  =  simplexml_load_file($file);
-
-                        $clientesArray = [];
-
-                        foreach ($clientesXML as $cliente) {
-
-                            if ($cliente->ID_SECTOR == 'RT') {
-                                continue;
-                            }
-
-                            array_push($clientesArray, [
-                                'id_oficina_comercial' => $cliente->ID_OFICINA_COMERCIAL,
-                                'servicio' => $cliente->SERVICIO,
-                                'agrupacion' => $cliente->ID_AGRUPACION,
-                                'sector' => $cliente->ID_SECTOR,
-                                'nombre' => $cliente->NOMBRE_CLIENTE,
-                                'direccion' => $cliente->DIRECCION_POSTAL,
-                                'cuenta_bancaria' => $cliente->CUENTA_BANCARIA,
-                                'fecha_alta' => $cliente->FECHA_ALTA
-                            ]);
-                        }
-                        try {
-                            $chunked_new_record_array = array_chunk($clientesArray, 6500, true);
-
-                            foreach ($chunked_new_record_array as $new_record_chunk) {
-                                Cliente::insert($new_record_chunk);
-                            }
-                        } catch (\Throwable $th) {
-                            Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
-                            unlink(public_path('/storage/files/' . $nombreArchivo));
-                            // return response()->json([
-                            //     'mensaje' => 'Ya existe un usuario con ese id en el archivo',
-                            // ]);
-                            return back();
-                        }
-
-
-                        XmlFile::create([
-                            'name' => $nombreArchivo,
-                        ]);
-                        // }
-
-                        unlink(public_path('/storage/files/' . $nombreArchivo));
-                    }
-                } else {
-                    Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                    return back();
-                    // return response()->json([
-                    //     'mensaje' => 'EL archivo seleccionado no es un xml o xsd',
-                    // ]);
-                }
-            }
-            Alert::success('Subido', 'Los achivos se han subido correctamente');
-            // return response()->json([
-            //     'mensaje' => 'Los achivos se han subido correctamente',
-            // ]);
-            return back();
-        } else {
+        if (!$request->hasFile('file')) {
             Alert::error('Error', 'Debe subir al menos 1 archivo');
             return back();
-            // return response()->json([
-            //     'mensaje' => 'Debe subir al menos 1 archivo',
-            // ]);
         }
-    }
 
+        foreach ($files as $file) {
 
+            $nombreArchivo = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            if (!in_array($ext, ['xml', 'xsd'])) {
+                Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
+                return back();
+            }
 
+                $clientesXML  =  simplexml_load_file($file);
+                $clientesArray = [];
+                foreach ($clientesXML as $cliente) {
 
-    public function facturass(Request $request)
-    {
-        $files = $request->file('file');
-
-        if ($request->hasFile('file')) {
-
-            foreach ($files as $file) {
-
-                $nombreArchivo = $file->getClientOriginalName();
-                $ext = $file->getClientOriginalExtension();
-
-                if (!in_array($ext, ['xml', 'xsd'])) {
-                    Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                    return back();
-                }
-
-                if (!Storage::putFileAs('/public/files', $file, $nombreArchivo)) {
-                    Alert::error('Error', 'No se pudo guardar el archivo: ' . $nombreArchivo);
-                    return back();
-                }
-
-
-
-
-                $facturasXML  =  simplexml_load_file($file);
-                $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
-
-                $facturasArrayToDB = [];
-
-
-
-                foreach ($facturasArray as $factura1) {
-                    if ($factura1['SECTOR'] != 'RT') {
-
-
-                        $agrupacion = [];
-                        foreach ($facturasArray as $factura2) {
-                            if ($factura1['AGRUPACION'] == $factura2['AGRUPACION']) {
-                                array_push($agrupacion, $factura2);
-                            }
-                        }
-
-                        $servicio = '';
-                        $total = 0;
-                        foreach ($agrupacion as $item) {
-                            $total = array_sum(array_column($item, 'TOTAL'));
-
-                            if ($item['SERVICIO'] != '') {
-                                $servicio = $item['SERVICIO'];
-                            }
-                        }
-
-                        array_push($facturasArrayToDB,  [
-                            'oficina'          => gettype($factura1['OFICINA']) == 'array' ? '' : $factura1['OFICINA'],
-                            'agrupacion'       => gettype($factura1['AGRUPACION']) == 'array' ? '' : $factura1['AGRUPACION'],
-                            'cuenta'           => gettype($factura1['CUENTA']) == 'array' ? '' : $factura1['CUENTA'],
-                            'no_factura'       => gettype($factura1['NO_FACTURA']) == 'array' ? '' : $factura1['NO_FACTURA'],
-                            'nombre_cliente'   => gettype($factura1['NOMBRE']) == 'array' ? '' : $factura1['NOMBRE'],
-                            'servicio_cliente' => gettype($servicio) == 'array' ? '' : $servicio,
-                            'total'            => $total,
-                        ]);
+                    $clienteEspecifico = Cliente::where('servicio', $cliente->SERVICIO)->first();
+                    if ($clienteEspecifico) {
+                         continue;
                     }
+
+
+                    if ($cliente->ID_SECTOR == 'RT') {
+                        continue;
+                    }
+
+                    array_push($clientesArray, [
+                        'id_oficina_comercial' => $cliente->ID_OFICINA_COMERCIAL,
+                        'servicio' => $cliente->SERVICIO,
+                        'agrupacion' => $cliente->ID_AGRUPACION,
+                        'sector' => $cliente->ID_SECTOR,
+                        'nombre' => $cliente->NOMBRE_CLIENTE,
+                        'direccion' => $cliente->DIRECCION_POSTAL,
+                        'cuenta_bancaria' => $cliente->CUENTA_BANCARIA,
+                        'fecha_alta' => $cliente->FECHA_ALTA
+                    ]);
                 }
 
-                $facturasArrayToDBNODUPL = array_unique($facturasArrayToDB, SORT_REGULAR);
+
                 try {
-                    $chunked_new_record_array = array_chunk($facturasArrayToDBNODUPL, 3000, true);
+                    $chunked_new_record_array = array_chunk($clientesArray, 6500, true);
 
                     foreach ($chunked_new_record_array as $new_record_chunk) {
-                        Factura::insert($new_record_chunk);
+                        Cliente::insert($new_record_chunk);
                     }
                 } catch (\Throwable $th) {
-                    Alert::error('Error', 'Ya existe una factura con ese id en el archivo: ' . $nombreArchivo);
-                    unlink(public_path('/storage/files/' . $nombreArchivo));
+                    Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
                     return back();
                 }
-
-
-                XmlFile::create([
-                    'name' => $nombreArchivo,
-                ]);
-                // }
-
-                unlink(public_path('/storage/files/' . $nombreArchivo));
-            }
-
             Alert::success('Subido', 'Los achivos se han subido correctamente');
-            return back();
-        } else {
-            Alert::error('Error', 'Debe subir al menos 1 archivo');
             return back();
         }
     }
+
+
+
+
+
     public function facturas(Request $request)
     {
         $files = $request->file('file');
@@ -219,6 +100,8 @@ class XmlFileController extends Controller
             Alert::error('Error', 'Debe subir al menos 1 archivo');
             return back();
         }
+
+        // por si en algun mometo hay que guardar el archivo    $filePath = $file->store('public/files');
         foreach ($files as $file) {
 
             $nombreArchivo = $file->getClientOriginalName();
@@ -228,10 +111,10 @@ class XmlFileController extends Controller
                 Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
                 return back();
             }
-            if (!Storage::putFileAs('/public/files', $file, $nombreArchivo)) {
-                Alert::error('Error', 'No se pudo guardar el archivo: ' . $nombreArchivo);
-                return back();
-            }
+            // if (!Storage::putFileAs('/public/files', $file, $nombreArchivo)) {
+            //     Alert::error('Error', 'No se pudo guardar el archivo: ' . $nombreArchivo);
+            //     return back();
+            // }
             $facturasXML  =  simplexml_load_file($file);
             $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
             $facturasArrayToDB = [];
@@ -264,6 +147,7 @@ class XmlFileController extends Controller
                 if ($servicio == '') {
                     continue;
                 }
+                // anadir otro campo que seria el atraso..........
                 array_push($facturasArrayToDB,  [
                     'oficina'          => gettype($facturasArray[$i]['OFICINA'])    == 'array' ? '' : $facturasArray[$i]['OFICINA'],
                     'agrupacion'       => gettype($facturasArray[$i]['AGRUPACION']) == 'array' ? '' : $facturasArray[$i]['AGRUPACION'],
@@ -286,14 +170,6 @@ class XmlFileController extends Controller
                 unlink(public_path('/storage/files/' . $nombreArchivo));
                 return back();
             }
-
-
-            XmlFile::create([
-                'name' => $nombreArchivo,
-            ]);
-
-
-            unlink(public_path('/storage/files/' . $nombreArchivo));
         }
 
         Alert::success('Subido', 'Los achivos se han subido correctamente');
@@ -305,84 +181,20 @@ class XmlFileController extends Controller
 
 
 
-    public function facturasas(Request $request)
-    {
-
-        $request->validate([
-            'file' => 'required|array',
-            'file.*' => 'required|mimes:xml,xsd|max:60000000',
-        ]);
-
-        foreach ($request->file('file') as $file) {
-            $nombreArchivo = $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension();
-
-            if (!in_array($extension, ['xml', 'xsd'])) {
-                Alert::error('Error', 'El archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                continue;
-            }
-            $filePath = $file->store('public/files');
-            $facturasXML = simplexml_load_file($file);
-            $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
-            //aqui esta el array organizado
-
-            $facturasArrayToDB = [];
-
-
-            $agrupados = $this->agruparPor($facturasArray, 'AGRUPACION');
-            $clientes = Cliente::where('id_oficina_comercial', $facturasArray[0]['OFICINA'])->get();
 
 
 
-
-
-            foreach ($agrupados as $item) {
-                $total = array_sum(array_column($item, 'TOTAL'));
-
-                $servicio = null;
-                foreach ($item as $f) {
-                    if ($f['ESTADO'] == 'F') {
-                        continue;
-                    }
-
-                    if (isset($f['SERVICIO']) && !empty($f['SERVICIO'])) {
-                        $servicio = $f['SERVICIO'] ?? null;
-                    }
-
-                    $phoneToFind = $f["SERVICIO"];
-
-
-                    $facturaToDB = [
-                        'oficina'          => gettype($f['OFICINA']) == 'array' ? '' : $f['OFICINA'],
-                        'agrupacion'       => gettype($f['AGRUPACION']) == 'array' ? '' : $f['AGRUPACION'],
-                        'cuenta'           => gettype($f['CUENTA']) == 'array' ? '' : $f['CUENTA'],
-                        'no_factura'       => gettype($f['NO_FACTURA']) == 'array' ? '' : $f['NO_FACTURA'],
-                        'nombre_cliente'   => gettype($f['NOMBRE']) == 'array' ? '' : $f['NOMBRE'],
-                        'servicio_cliente' => $servicio,
-                        'total' => $total,
-                    ];
-                    // Agregar el registro al array
-                    $facturasArrayToDB[] = $facturaToDB;
-                    $facturaToDBNoDuplicate = array_unique($facturasArrayToDB, SORT_REGULAR);
-                }
-            }
-
-            Factura::insert($facturaToDBNoDuplicate);
-        }
-    }
-
-
-    private  function agruparPor($arr, $llave)
-    {
-        return array_reduce($arr, function ($resultado, $elemento) use ($llave) {
-            $valorLlave = $elemento[$llave];
-            if (!isset($resultado[$valorLlave])) {
-                $resultado[$valorLlave] = [];
-            }
-            $resultado[$valorLlave][] = $elemento;
-            return $resultado;
-        }, []);
-    }
+    // private  function agruparPor($arr, $llave)
+    // {
+    //     return array_reduce($arr, function ($resultado, $elemento) use ($llave) {
+    //         $valorLlave = $elemento[$llave];
+    //         if (!isset($resultado[$valorLlave])) {
+    //             $resultado[$valorLlave] = [];
+    //         }
+    //         $resultado[$valorLlave][] = $elemento;
+    //         return $resultado;
+    //     }, []);
+    // }
 
 
 
@@ -411,23 +223,20 @@ class XmlFileController extends Controller
                                 'id_oficina_comercial' => $id_oficina,
                                 'nombre' => $item[7],
                             ]);
-                         
-                               
-                                $cliente  =  Cliente::where('servicio', $item[4])->first();
-
-                                if (!empty($cliente)) {
-                                    $cliente->id_agente = $agente->id;
-                                    $cliente->save();
-                                } else {
-                                   //salvar en la base de datos los clientes que no existan en la base de datos
-                                    NAgredado::create([
-                                        'id_agente' => $agente->id,
-                                        'servicio' => $item[4],
-                                    ]);
-
-                                }
 
 
+                            $cliente  =  Cliente::where('servicio', $item[4])->first();
+
+                            if (!empty($cliente)) {
+                                $cliente->id_agente = $agente->id;
+                                $cliente->save();
+                            } else {
+                                //salvar en la base de datos los clientes que no existan en la base de datos
+                                NAgredado::create([
+                                    'id_agente' => $agente->id,
+                                    'servicio' => $item[4],
+                                ]);
+                            }
                         }
                     } else {
                         echo SimpleXLS::parseError();
@@ -455,27 +264,27 @@ class XmlFileController extends Controller
 
 
 
-                
-              
-
-                
 
 
-               
 
-            
-               
-            
 
-           
-     
-        
-    
-   
-      
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Array ( [0] => SECTOR [1] => IMPORTE FACTURADO [2] => C.IDENT. [3] => MONEDA [4] => NOMBRE SERVICIO [5] => DESCRIPCION [6] => IMPORTE COBRADO [7] => CLIENTE [8] => IMPORTE COMISION

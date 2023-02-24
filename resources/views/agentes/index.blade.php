@@ -8,6 +8,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Listado de Agentes</h3>
                     <div id="buttons"></div>
+
                 </div>
                 <div class="card-body">
                     <div id="agentes_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -18,11 +19,12 @@
                                     <thead>
                                         <tr>
                                             <td>
-                                              
-                                                <select data-column="1" class="form-control filter-input" id="filtro">
+
+                                                <select data-column="0" class="form-control filter-input" id="filtro">
                                                     <option value="">Seleciona la Oficina</option>
                                                     @foreach ($ocomerciales as $oficina)
-                                                    <option value="{{ $oficina->nombre }}"> {{ $oficina->nombre }} </option>   
+                                                        <option value="{{ $oficina->nombre }}"> {{ $oficina->nombre }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -30,13 +32,10 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+
                                         </tr>
                                         <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> ID
-                                            </th>
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending"> Oficina
@@ -51,24 +50,26 @@
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Modificado
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                Modificado
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Ver Clientes
+                                                aria-label="Rendering engine: activate to sort column descending"> Ver
+                                                Clientes
                                             </th>
-                                            
+
                                         </tr>
-                                        
+
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th rowspan="1" colspan="1" >ID</th>
-                                            <th rowspan="1" colspan="1" >Oficina</th>
-                                            <th rowspan="1" colspan="1" >Nombre</th>
-                                            <th rowspan="1" colspan="1" >Creado</th>
-                                            <th rowspan="1" colspan="1" >Modificado</th>
-                                            <th rowspan="1" colspan="1" >Ver Clientes</th>                                
+
+                                            <th rowspan="1" colspan="1">Oficina</th>
+                                            <th rowspan="1" colspan="1">Nombre</th>
+                                            <th rowspan="1" colspan="1">Creado</th>
+                                            <th rowspan="1" colspan="1">Modificado</th>
+                                            <th rowspan="1" colspan="1">Ver Clientes</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -117,9 +118,7 @@
                     dataSrc: 'data'
                 },
                 columns: [
-                    {
-                        data: 'id'
-                    },
+
                     {
                         data: 'oficina_nombre'
                     },
@@ -131,10 +130,10 @@
                     },
                     {
                         data: 'updated_at'
-                    },  
+                    },
                     {
                         data: 'show_clients'
-                    },  
+                    },
                 ],
                 serverside: true,
                 responsive: true,
@@ -144,16 +143,14 @@
                     "copy", "csv", "excel", "pdf",
                 ]
             });
-            
 
 
-            $('#filtro').change(function(){
+
+            $('#filtro').change(function() {
                 table.column($(this).data('column'))
-                .search($(this).val())
-                .draw();
+                    .search($(this).val())
+                    .draw();
             });
         });
-
-
     </script>
 @endsection

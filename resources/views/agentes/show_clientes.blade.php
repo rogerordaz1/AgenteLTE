@@ -7,7 +7,9 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Facturas de los clientes de : {{ $agente->nombre }}</h3>
-                    <div id="buttons"></div>
+                    <div class="d-flex justify-content-end">
+                        <a href="{{route('dashboard.agentes.edit' , $agente )}}" type="button" class="btn btn-info btn-sm ml-auto">Adicionar Cliente</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div id="clientes-agente_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -60,7 +62,7 @@
                                             <th rowspan="1" colspan="1">Servicio</th>
                                             <th rowspan="1" colspan="1">TOTAL</th>
                                         </tr>
-                                        
+
                                     </tfoot>
                                 </table>
                             </div>
@@ -92,8 +94,9 @@
                                                     aria-label="Rendering engine: activate to sort column descending">
                                                     Nombre
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                                    colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                <th class="sorting" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Browser: activate to sort column ascending"
                                                     style="">Agente
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="example1"
@@ -193,8 +196,39 @@
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
-                buttons: [
-                    "copy", "csv", "excel", "pdf",
+                buttons: [{
+                        extend: 'pdf',
+                        text: 'PDF',
+                        exportOptions: {
+                            columns: [0, 1, 4, 5, 6]
+
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Exel',
+                        exportOptions: {
+                            columns: [0, 1, 4, 5, 6]
+
+                        }
+                    },
+                    {
+                        extend: 'copy',
+                        text: 'Copiar Contenido',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV',
+                        exportOptions: {
+                            columns: [5, 6]
+                        }
+                    },
+
+
                 ]
             });
 

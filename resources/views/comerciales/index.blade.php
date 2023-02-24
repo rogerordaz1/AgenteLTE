@@ -1,8 +1,6 @@
 @extends('panel_admin')
 
 @section('contenido')
-  
-   
     {{--  La DataTablde DE adminlte --}}
     <div class="row">
         <div class="col-12">
@@ -48,7 +46,8 @@
                                                     {{ $comercial->direccion }}
                                                 </td>
                                                 <td style="">
-                                                    <a href="{{ route('dashboard.ocomerciales.show' , $comercial->id ) }}" type="button" class="btn btn-info">Clientes</a>
+                                                    <a href="{{ route('dashboard.ocomerciales.show', $comercial->id) }}"
+                                                        type="button" class="btn btn-info">Clientes</a>
                                                 </td>
 
 
@@ -61,7 +60,7 @@
                                             <th rowspan="1" colspan="1">Nombre</th>
                                             <th rowspan="1" colspan="1" style="">Direccion</th>
                                             <th rowspan="1" colspan="1" style="">Utilidades</th>
-                                            
+
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -90,7 +89,6 @@
 @endsection
 
 @section('js')
-    
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }} "></script>
 
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js ') }}"></script>
@@ -112,7 +110,19 @@
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": [
+                    {
+                        extend: 'pdf',
+                        text: 'Exportar a PDF',
+                        exportOptions: {
+                            columns: [1, 2] // Indica las columnas a exportar (la primera y la tercera)
+                        }
+                    },
+
+                    "copy", "csv", "excel", "print", "colvis"
+
+
+                ]
             }).buttons().container().appendTo('#comerciales_wrapper .col-md-6:eq(0)');
 
         });

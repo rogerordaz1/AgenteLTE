@@ -1,7 +1,7 @@
 @extends('panel_admin')
 
 @section('contenido')
-  
+
     <a href="/dashboard/users/create" type="button" class="btn btn-success mb-3">Crear Usuario</a>
     {{--  La DataTablde DE adminlte --}}
     <div class="row">
@@ -55,18 +55,18 @@
                                                     <form action="{{ route('dashboard.users.destroy', $user) }}" method="post">
                                                         @csrf
                                                         @method('DELETE')
-                            
-                            
-                                                        <a href="/dashboard/users/{{ $user->id }}" type="button" class="btn btn-info">Show</a>
+
+
+                                                        <a href="/dashboard/users/{{ $user->id }}" type="button" class="btn btn-info btn-sm">Show</a>
                                                         <a href="{{ route('dashboard.users.edit', $user) }}" type="button"
-                                                            class="btn btn-primary">Editar</a>
-                            
+                                                            class="btn btn-primary btn-sm">Editar</a>
+
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                             data-target="#modal1{{ $user->id }}">
                                                             Eliminar
                                                         </button>
-                            
+
                                                         <!-- Modal -->
                                                         <div class="modal fade" id="modal1{{ $user->id }}" tabindex="-1" role="dialog"
                                                             aria-labelledby="modalLabel" aria-hidden="true">
@@ -89,9 +89,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                            
+
                                                     </form>
-                            
+
                                                 </td>
 
                                             </tr>

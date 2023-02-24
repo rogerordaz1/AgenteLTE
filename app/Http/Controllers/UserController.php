@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
- 
+
     public function __construct()
     {
         $this->middleware('can:dashboard.users.index')->only('index');
@@ -19,7 +20,7 @@ class UserController extends Controller
         $this->middleware('can:dashboard.users.update')->only('update');
         $this->middleware('can:dashboard.users.delete')->only('delete');
     }
-    
+
 
 
     public function index()
@@ -48,7 +49,7 @@ class UserController extends Controller
             ]
         );
     }
-  
+
     public function store(Request $request)
     {
         $user = new User();
@@ -56,13 +57,14 @@ class UserController extends Controller
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->password = bcrypt( $request->get('pass'));
-       
+
+        $user->assignRole($request->get('role_name'));
 
         $user->save();
 
         return redirect('/dashboard/users');
     }
-  
+
     public function show($id)
     {
         $user = User::find($id);
@@ -72,16 +74,16 @@ class UserController extends Controller
 
             [
                 'user' => $user,
-                
+
                 'usersCount' =>  $usersCount
             ]
         );
     }
-  
+
     public function edit($id)
     {
         $user = User::find($id);
-         $roles = Role::all();
+        $roles = Role::all();
         $usersCount = User::all()->count();
         return view(
             'users.edit',
@@ -93,18 +95,17 @@ class UserController extends Controller
             ]
         );
     }
-   
+
     public function update(Request $request, User $user)
     {
         $user->name = $request->get('name');
         $user->email = $request->get('email');
-        $user->password = bcrypt( $request->get('pass'));
 
-        
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
         $user->roles()->sync($request->get('role_id'));
-        
         $user->save();
-
         return redirect('/dashboard/users');
     }
 
