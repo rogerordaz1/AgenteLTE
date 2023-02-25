@@ -29,12 +29,14 @@ class XmlFileController extends Controller
     public function clientes(Request $request)
     {
         //  Hacer la funcion manual de eliminar el cliente....
+        $files = $request->file('files');
 
-        $files = $request->file('file');
-
-        if (!$request->hasFile('file')) {
-            Alert::error('Error', 'Debe subir al menos 1 archivo');
-            return back();
+        if (!$request->hasFile('files')) {
+            return response()->json([
+                'message' => 'Debe subir al menos 1 archivo.',
+                'header' => 'Upss!!!',
+                'icon' => 'error',
+            ], 400);
         }
 
         foreach ($files as $file) {
@@ -42,8 +44,11 @@ class XmlFileController extends Controller
             $nombreArchivo = $file->getClientOriginalName();
             $ext = $file->getClientOriginalExtension();
             if (!in_array($ext, ['xml', 'xsd'])) {
-                Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                return back();
+                return response()->json([
+                    'message' => 'EL archivo seleccionado no es un xml o xsd' . $nombreArchivo,
+                    'header' => 'Upss!!!',
+                    'icon' => 'error',
+                ]);
             }
 
             $clientesXML  =  simplexml_load_file($file);
@@ -80,11 +85,19 @@ class XmlFileController extends Controller
                     Cliente::insert($new_record_chunk);
                 }
             } catch (\Throwable $th) {
-                Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
-                return back();
+
+                return response()->json([
+                    'message' => 'Occurio algun error cuando se trato de guardar en la BD el archivo: ' . $nombreArchivo,
+                    'header' => 'Upss!!!',
+                    'icon' => 'error',
+                ]);
             }
-            Alert::success('Subido', 'Los achivos se han subido correctamente');
-            return back();
+
+            return response()->json([
+                'message' => 'Los achivos se han subido correctamente',
+                'header' => 'Operacion Exitosa',
+                'icon' => 'success',
+            ]);
         }
     }
 
@@ -94,11 +107,14 @@ class XmlFileController extends Controller
 
     public function facturas(Request $request)
     {
-        $files = $request->file('file');
+        $files = $request->file('files');
 
-        if (!$request->hasFile('file')) {
-            Alert::error('Error', 'Debe subir al menos 1 archivo');
-            return back();
+        if (!$request->hasFile('files')) {
+            return response()->json([
+                'message' => 'Debe subir al menos 1 archivo.',
+                'header' => 'Upss!!!',
+                'icon' => 'error',
+            ], 400);
         }
 
         // por si en algun mometo hay que guardar el archivo    $filePath = $file->store('public/files');
@@ -108,13 +124,13 @@ class XmlFileController extends Controller
             $ext = $file->getClientOriginalExtension();
 
             if (!in_array($ext, ['xml', 'xsd'])) {
-                Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                return back();
+                return response()->json([
+                    'message' => 'EL archivo seleccionado no es un xml o xsd' . $nombreArchivo,
+                    'header' => 'Upss!!!',
+                    'icon' => 'error',
+                ]);
             }
-            // if (!Storage::putFileAs('/public/files', $file, $nombreArchivo)) {
-            //     Alert::error('Error', 'No se pudo guardar el archivo: ' . $nombreArchivo);
-            //     return back();
-            // }
+
             $facturasXML  =  simplexml_load_file($file);
             $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
             $facturasArrayToDB = [];
@@ -148,6 +164,12 @@ class XmlFileController extends Controller
                     continue;
                 }
                 // anadir otro campo que seria el atraso..........
+
+                // Anadir una validacion para verificar que la factura no c encuentre en la database...
+                $facturaExiste = Factura::where('no_factura', $facturasArray[$i]['NO_FACTURA'])->first();
+                if ($facturaExiste) {
+                    continue;
+                }
                 array_push($facturasArrayToDB,  [
                     'oficina'          => gettype($facturasArray[$i]['OFICINA'])    == 'array' ? '' : $facturasArray[$i]['OFICINA'],
                     'agrupacion'       => gettype($facturasArray[$i]['AGRUPACION']) == 'array' ? '' : $facturasArray[$i]['AGRUPACION'],
@@ -166,13 +188,19 @@ class XmlFileController extends Controller
                     Factura::insert($new_record_chunk);
                 }
             } catch (\Throwable $th) {
-                Alert::error('Error', 'Ocurrio un error a la hora de guardar en la base de datos ' . $nombreArchivo);
-                return back();
+                return response()->json([
+                    'message' => 'Occurio algun error cuando se trato de guardar en la BD el archivo: ' . $nombreArchivo,
+                    'header' => 'Upss!!!',
+                    'icon' => 'error',
+                ]);
             }
         }
 
-        Alert::success('Subido', 'Los achivos se han subido correctamente');
-        return back();
+        return response()->json([
+            'message' => 'Los achivos se han subido correctamente',
+            'header' => 'Operacion Exitosa',
+            'icon' => 'success',
+        ]);
     }
 
 
@@ -183,17 +211,6 @@ class XmlFileController extends Controller
 
 
 
-    // private  function agruparPor($arr, $llave)
-    // {
-    //     return array_reduce($arr, function ($resultado, $elemento) use ($llave) {
-    //         $valorLlave = $elemento[$llave];
-    //         if (!isset($resultado[$valorLlave])) {
-    //             $resultado[$valorLlave] = [];
-    //         }
-    //         $resultado[$valorLlave][] = $elemento;
-    //         return $resultado;
-    //     }, []);
-    // }
 
 
 
@@ -265,20 +282,11 @@ class XmlFileController extends Controller
 
     public function upload(Request $request)
     {
-        // if ($request->hasFile('files')) {
-        //     foreach ($request->file('files') as $file) {
-        //       $filename = $file->getClientOriginalName();
-        //       $file->move(public_path('uploads'), $filename);
-        //     }
-        //     return response()->json(['message' => 'Archivos cargados correctamente.']);
-        //   } else {
-        //     return response()->json(['message' => 'No se seleccionaron archivos.'], 400);
-        //   }
+
 
         $files = $request->file('files');
 
         if (!$request->hasFile('files')) {
-            Alert::error('Error', 'Debe subir al menos 1 archivo');
             return response()->json(['message' => 'Debe subir al menos 1 archivo.'], 400);
         }
 
@@ -287,8 +295,7 @@ class XmlFileController extends Controller
             $nombreArchivo = $file->getClientOriginalName();
             $ext = $file->getClientOriginalExtension();
             if (!in_array($ext, ['xml', 'xsd'])) {
-                Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
-                return response()->json(['message' => 'EL archivo seleccionado no es un xml o xsd']);
+                return response()->json(['message' => 'EL archivo seleccionado no es un xml o xsd' . $nombreArchivo]);
             }
 
             $clientesXML  =  simplexml_load_file($file);
@@ -325,10 +332,10 @@ class XmlFileController extends Controller
                     Cliente::insert($new_record_chunk);
                 }
             } catch (\Throwable $th) {
-                Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
-                return response()->json(['message' => 'Ya existe un usuario con ese id en el archivo']);
+
+                return response()->json(['message' => 'Ya existe un usuario con ese id en el archivo' . $nombreArchivo]);
             }
-            Alert::success('Subido', 'Los achivos se han subido correctamente');
+
             return response()->json(['message' => 'Los achivos se han subido correctamente']);
         }
     }

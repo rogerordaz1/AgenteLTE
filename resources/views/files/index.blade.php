@@ -14,19 +14,26 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.file.clientes') }}" enctype="multipart/form-data" id="upload"
+                    <form action="{{ route('dashboard.file.clientes') }}" enctype="multipart/form-data" id="clientes-upload"
                         method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="file" name="file[]" multiple required id="file"
+                                    <input type="file" name="files[]" multiple required id="file"
                                         placeholder="ELige el archivo">
                                 </div>
                             </div>
 
                             <div class="col-md-12">
-                                <button class="btn btn-primary" type="submit">Confirmar</button>
+                                <button class="btn btn-primary" id="confirm-cliente" type="submit">
+                                    Confirmar
+                                </button>
+                                <button class="btn btn-primary" id="loading-cliente" style="display: none;" type="button"
+                                    disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Cargando...
+                                </button>
                             </div>
 
                         </div>
@@ -38,12 +45,8 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Selecciones los archivos de el cargo a emitir</h3>
+                    <h3 class="card-title">Selecciones los archivos de las facturas</h3>
                     <div class="d-flex justify-content-end">
-
-                        {{-- <a href="{{ route('dashboard.file.vaciarFacturas') }}" type="button"
-                            class="btn btn-info btn-sm ml-auto">Vaciar Facturas</a> --}}
-
                         <button type="button" class="btn btn-danger btn-sm" id="delete-facturas-btn">Eliminar
                             Facturas</button>
                     </div>
@@ -51,19 +54,26 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.file.facturas') }}" enctype="multipart/form-data" id="upload-file"
+                    <form action="{{ route('dashboard.file.facturas') }}" enctype="multipart/form-data" id="facturas-upload"
                         method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="file" name="file[]" multiple required id="file"
+                                    <input type="file" name="files[]" multiple required id="file"
                                         placeholder="ELige el archivo">
                                 </div>
                             </div>
 
                             <div class="col-md-12">
-                                <button class="btn btn-primary" type="submit">Confirmar</button>
+                                <button class="btn btn-primary" id="confirm-factura" type="submit">
+                                    Confirmar
+                                </button>
+                                <button class="btn btn-primary" id="loading-factura" style="display: none;" type="button"
+                                    disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Cargando...
+                                </button>
                             </div>
                         </div>
 
@@ -98,27 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Selecione los Agentes a Subir</h3>
-                </div>
 
-                <div class="card-body">
-                    <form id="upload-form" enctype="multipart/form-data">
-                        @csrf
-                        <input type="file" name="files[]" multiple>
-                        <button class="btn btn-primary" id="confirm" type="submit">
-                           Confirmar
-                        </button>
-                        <button class="btn btn-primary" id="loading" style="display: none;" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Cargando...
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
 
 
@@ -151,14 +141,8 @@
 @endsection
 
 
-@section('css')
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-@endsection
 
 @section('js')
-    <script src="{{ asset('plugins/dropzone/min/dropzone.min.js') }}"></script>
-
-
     <script>
         $(document).ready(function() {
             $('#delete-facturas-btn').click(function() {
@@ -166,55 +150,115 @@
             });
         });
     </script>
+    {{-- Este es el script de los clientes... --}}
     <script>
-        $('#upload-form').submit(function(e) {
+        $('#clientes-upload').submit(function(e) {
             e.preventDefault();
-
             var formData = new FormData(this);
-
-            console.log(formData);
-
             $.ajax({
-                url: '{{ route('dashboard.file.clientes_prueba') }}',
+                url: '{{ route('dashboard.file.clientes') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                xhr: function() {
-                    var xhr = new XMLHttpRequest();
-                    xhr.upload.addEventListener('progress', function(event) {
-                        if (event.lengthComputable) {
-                            var percent = Math.round((event.loaded / event.total) * 100);
-                            $('#progress-bar').css('width', percent + '%').attr('aria-valuenow',
-                                percent);
-                        }
-                    }, false);
-                    return xhr;
-                },
                 beforeSend: function() {
                     console.log('Antes de enviar');
                     // Muestra el indicador de carga
-                    $('#loading').show();
-                    $('#confirm').hide();
+                    $('#loading-cliente').show();
+                    $('#confirm-cliente').hide();
                 },
                 success: function(response) {
                     // Maneja la respuesta del servidor
-                    $('#loading').hide();
-                    $('#confirm').show();
+                    $('#loading-cliente').hide();
+                    $('#confirm-cliente').show();
                     console.log(response);
-                    // swal("Good job!", "You clicked the button!", "success");
+
+                    swal({
+                            title: response.header,
+                            text: response.message,
+                            icon: response.icon,
+                            button: "Cerrar",
+                        }
+
+                    ).then((value) => {
+                        location.reload();
+
+                    });
+
+
                 },
                 error: function(xhr, status, error) {
                     // Maneja los errores
-                    $('#confirm').show();
-                    $('#loading').hide();
-                    console.error(error);
+                    $('#confirm-cliente').show();
+                    $('#loading-cliente').hide();
+                    console.log(error);
+
+                    swal({
+                        title: "Ha Occurrido algun Error",
+                        text: error,
+                        icon: 'error',
+                        button: "Cerrar",
+                    }).then((value) => {
+                        location.reload();
+
+                    });
+
                 },
-                complete: function() {
-                    // Oculta el indicador de carga
-                    $('#loading').hide();
-                    $('#confirm').show();
-                }
+
+            });
+        });
+    </script>
+    {{-- Este es el script de las facturas --}}
+
+    <script>
+        $('#facturas-upload').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '{{ route('dashboard.file.facturas') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    console.log('Antes de enviar');
+                    // Muestra el indicador de carga
+                    $('#loading-factura').show();
+                    $('#confirm-factura').hide();
+                },
+                success: function(response) {
+                    // Maneja la respuesta del servidor
+                    $('#loading-factura').hide();
+                    $('#confirm-factura').show();
+                    console.log(response);
+                    swal({
+                            title: response.header,
+                            text: response.message,
+                            icon: response.icon,
+                            button: "Cerrar",
+                        }
+                    ).then((value) => {
+                        location.reload();
+
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Maneja los errores
+                    $('#confirm-factura').show();
+                    $('#loading-factura').hide();
+                    console.log(error);
+
+                    swal({
+                        title: "Ha Occurrido algun Error",
+                        text: error,
+                        icon: 'error',
+                        button: "Cerrar",
+                    }).then((value) => {
+                        location.reload();
+                    });
+
+                },
+
             });
         });
     </script>

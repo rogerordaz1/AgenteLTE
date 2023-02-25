@@ -56,7 +56,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/dashboard/xmlfiles', [XmlFileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.xmlfile');
 
-Route::post('/dashboard/file/clientes/prueba', [XmlFileController::class, 'upload'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes_prueba');
+// Route::post('/dashboard/file/clientes/prueba', [XmlFileController::class, 'upload'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes_prueba');
 
 Route::post('/dashboard/file/clientes', [XmlFileController::class, 'clientes'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes');
 Route::post('/dashboard/file/facturas', [XmlFileController::class, 'facturas'])->middleware(['auth', 'verified'])->name('dashboard.file.facturas');
@@ -71,6 +71,6 @@ Route::get('/datatable/clientes-agente/{agente}', [DatatableController::class, '
 Route::get('/dashboard/select/clientes', [AgenteController::class, 'selectClientes'])->name('dashboard.select.clientes');
 
 
-Route::get('/progress', [XmlFileController::class, 'getUploadProgress']);
+// Route::get('/progress', [XmlFileController::class, 'getUploadProgress']);
 
 require __DIR__ . '/auth.php';

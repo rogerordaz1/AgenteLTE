@@ -16,6 +16,7 @@
 
     <link href="{{ asset('dist/css/select2.min.css') }}" rel="stylesheet" />
 
+
     @yield('css')
 </head>
 
@@ -37,6 +38,8 @@
     <script src="{{ asset('dist/js/adminlte.min.js') }} "></script>
 
     <script src="{{ asset('dist/js/select2.full.min.js') }}"></script>
+    <script src="{{asset('dist/js/sweetalert.min.js')}}"></script>
+
     @yield('js')
 </body>
 
