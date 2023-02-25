@@ -48,6 +48,10 @@
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">TOTAL
                                             </th>
+                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                style="">Utilidad
+                                            </th>
 
 
                                         </tr>
@@ -61,6 +65,7 @@
                                             <th rowspan="1" colspan="1">#Factura</th>
                                             <th rowspan="1" colspan="1">Servicio</th>
                                             <th rowspan="1" colspan="1">TOTAL</th>
+                                            <th rowspan="1" colspan="1">Utilidad</th>
                                         </tr>
 
                                     </tfoot>
@@ -192,7 +197,12 @@
                     {
                         data: 'total'
                     },
+                    {
+                        data: 'unlink_client'
+                    },
                 ],
+                processing: true,
+                serverSide: true,
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,

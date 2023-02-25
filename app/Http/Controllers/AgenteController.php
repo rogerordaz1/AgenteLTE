@@ -68,12 +68,25 @@ class AgenteController extends Controller
 
     public function update(Request $request, Agente $agente)
     {
+
+
+    }
+    public function addCliente(Request $request, Agente $agente)
+    {
         $cliente = Cliente::where('id' , $request->get('servicio'))->first();
         $cliente->id_agente = $agente->id;
         $cliente->save();
         toast('Has adicionado el servicio: ' . $cliente->servicio .' al agente ' .$agente->nombre,'success');
         return redirect(route('dashboard.agentes.show', $agente));
 
+    }
+    public function removeCliente($id)
+    {
+        $cliente = Cliente::where('id' , $id)->first();
+        $cliente->id_agente = null;
+        $cliente->save();
+        toast('Has quitado el cliente: ' . $cliente->nombre .'correctamente' , 'success');
+        return back();
     }
 
 

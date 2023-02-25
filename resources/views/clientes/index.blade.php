@@ -129,6 +129,8 @@
                         data: 'total'
                     },
                 ],
+                processing: true,
+                serverSide: true,
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,

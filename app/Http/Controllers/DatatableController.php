@@ -24,11 +24,44 @@ class DatatableController extends Controller
 
         $facturas = collect();
         foreach ($agente->clientes as $key => $cliente) {
-
             $facturas->push($cliente->factura);
         }
 
-        return DataTables::collection($facturas)->toJson();
+        return DataTables::collection($facturas)
+            ->addColumn('unlink_client', function ($facturas) {
+                // return '<a href="{{route(\'dashboard.agentes.removeCliente\',$id)}}" type="button" class="btn btn-warning btn-sm">' . ('Eliminar') . '</a>';
+
+                $url = route('dashboard.agentes.removeCliente', $facturas->cliente->id);
+
+                return '
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#confirm-delete-' . $facturas->cliente->id . '">' . __("Eliminar") . '</button>
+                    <div class="modal fade" id="confirm-delete-' . $facturas->cliente->id . '" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-label-' . $facturas->cliente->id . '">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirm-delete-label-' . $facturas->cliente->id . '">' . __("Confirmar eliminación") . '</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="' . __("Cerrar") . '">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    ' . __("¿Está seguro de que desea quitar al cliente seleccionado?") . '
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">' . __("Cancelar") . '</button>
+                                    <form action="' . $url . '" method="POST">
+                                        ' . csrf_field() . '
+                                        ' . method_field('PUT') . '
+                                        <button type="submit" class="btn btn-warning">' . __("Quitar") . '</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ';
+            })
+            ->rawColumns(['unlink_client'])
+            ->toJson();
     }
 
 

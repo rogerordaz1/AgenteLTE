@@ -1,7 +1,7 @@
 @extends('panel_admin')
 
 @section('contenido')
-    
+
 
 
     {{--  La DataTablde DE adminlte --}}
@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="card-body">
-                  
+
                    {{ $cliente->factura->nombre_cliente }}
                    {{ $cliente->factura->servicio_cliente }}
                 </div>

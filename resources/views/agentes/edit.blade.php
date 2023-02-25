@@ -9,7 +9,7 @@
                     <h3 class="card-title">Editar Agente</h3>
                 </div>
                 <div class="card-body">
-                    <form class="pb-5" action="{{ route('dashboard.agentes.update', $agente) }}" method="post">
+                    <form class="pb-5" action="{{ route('dashboard.agentes.addCliente', $agente) }}" method="post">
                         @csrf
                         @method('PUT')
 
@@ -17,8 +17,6 @@
                             <label for="cliente">Seleccione un cliente: (Por Servicio)</label>
                             <select class="form-control" data-ajax-url="{{ route('dashboard.select.clientes') }}"
                                 name="servicio" id="servicio">
-
-
                             </select>
 
                         </div>
@@ -40,6 +38,7 @@
     <style>
         .select2-selection__rendered {
             line-height: normal !important;
+
         }
     </style>
 @endsection

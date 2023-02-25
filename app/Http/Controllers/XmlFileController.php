@@ -46,43 +46,43 @@ class XmlFileController extends Controller
                 return back();
             }
 
-                $clientesXML  =  simplexml_load_file($file);
-                $clientesArray = [];
-                foreach ($clientesXML as $cliente) {
+            $clientesXML  =  simplexml_load_file($file);
+            $clientesArray = [];
+            foreach ($clientesXML as $cliente) {
 
-                    $clienteEspecifico = Cliente::where('servicio', $cliente->SERVICIO)->first();
-                    if ($clienteEspecifico) {
-                         continue;
-                    }
-
-
-                    if ($cliente->ID_SECTOR == 'RT') {
-                        continue;
-                    }
-
-                    array_push($clientesArray, [
-                        'id_oficina_comercial' => $cliente->ID_OFICINA_COMERCIAL,
-                        'servicio' => $cliente->SERVICIO,
-                        'agrupacion' => $cliente->ID_AGRUPACION,
-                        'sector' => $cliente->ID_SECTOR,
-                        'nombre' => $cliente->NOMBRE_CLIENTE,
-                        'direccion' => $cliente->DIRECCION_POSTAL,
-                        'cuenta_bancaria' => $cliente->CUENTA_BANCARIA,
-                        'fecha_alta' => $cliente->FECHA_ALTA
-                    ]);
+                $clienteEspecifico = Cliente::where('servicio', $cliente->SERVICIO)->first();
+                if ($clienteEspecifico) {
+                    continue;
                 }
 
 
-                try {
-                    $chunked_new_record_array = array_chunk($clientesArray, 6500, true);
-
-                    foreach ($chunked_new_record_array as $new_record_chunk) {
-                        Cliente::insert($new_record_chunk);
-                    }
-                } catch (\Throwable $th) {
-                    Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
-                    return back();
+                if ($cliente->ID_SECTOR == 'RT') {
+                    continue;
                 }
+
+                array_push($clientesArray, [
+                    'id_oficina_comercial' => $cliente->ID_OFICINA_COMERCIAL,
+                    'servicio' => $cliente->SERVICIO,
+                    'agrupacion' => $cliente->ID_AGRUPACION,
+                    'sector' => $cliente->ID_SECTOR,
+                    'nombre' => $cliente->NOMBRE_CLIENTE,
+                    'direccion' => $cliente->DIRECCION_POSTAL,
+                    'cuenta_bancaria' => $cliente->CUENTA_BANCARIA,
+                    'fecha_alta' => $cliente->FECHA_ALTA
+                ]);
+            }
+
+
+            try {
+                $chunked_new_record_array = array_chunk($clientesArray, 6000, true);
+
+                foreach ($chunked_new_record_array as $new_record_chunk) {
+                    Cliente::insert($new_record_chunk);
+                }
+            } catch (\Throwable $th) {
+                Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
+                return back();
+            }
             Alert::success('Subido', 'Los achivos se han subido correctamente');
             return back();
         }
@@ -167,7 +167,6 @@ class XmlFileController extends Controller
                 }
             } catch (\Throwable $th) {
                 Alert::error('Error', 'Ocurrio un error a la hora de guardar en la base de datos ' . $nombreArchivo);
-                unlink(public_path('/storage/files/' . $nombreArchivo));
                 return back();
             }
         }
@@ -252,6 +251,97 @@ class XmlFileController extends Controller
             Alert::error('Error', 'Debe subir al menos 1 archivo');
             return back();
         }
+    }
+
+
+    public function vaciarFacturas(Request $request)
+    {
+        Factura::truncate();
+        Alert::success('Vaciado Correctamente', 'las facturas se han eliminado correctamente');
+        return back();
+    }
+
+
+
+    public function upload(Request $request)
+    {
+        // if ($request->hasFile('files')) {
+        //     foreach ($request->file('files') as $file) {
+        //       $filename = $file->getClientOriginalName();
+        //       $file->move(public_path('uploads'), $filename);
+        //     }
+        //     return response()->json(['message' => 'Archivos cargados correctamente.']);
+        //   } else {
+        //     return response()->json(['message' => 'No se seleccionaron archivos.'], 400);
+        //   }
+
+        $files = $request->file('files');
+
+        if (!$request->hasFile('files')) {
+            Alert::error('Error', 'Debe subir al menos 1 archivo');
+            return response()->json(['message' => 'Debe subir al menos 1 archivo.'], 400);
+        }
+
+        foreach ($files as $file) {
+
+            $nombreArchivo = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            if (!in_array($ext, ['xml', 'xsd'])) {
+                Alert::error('Error', 'EL archivo seleccionado no es un xml o xsd: ' . $nombreArchivo);
+                return response()->json(['message' => 'EL archivo seleccionado no es un xml o xsd']);
+            }
+
+            $clientesXML  =  simplexml_load_file($file);
+            $clientesArray = [];
+            foreach ($clientesXML as $cliente) {
+
+                $clienteEspecifico = Cliente::where('servicio', $cliente->SERVICIO)->first();
+                if ($clienteEspecifico) {
+                    continue;
+                }
+
+
+                if ($cliente->ID_SECTOR == 'RT') {
+                    continue;
+                }
+
+                array_push($clientesArray, [
+                    'id_oficina_comercial' => $cliente->ID_OFICINA_COMERCIAL,
+                    'servicio' => $cliente->SERVICIO,
+                    'agrupacion' => $cliente->ID_AGRUPACION,
+                    'sector' => $cliente->ID_SECTOR,
+                    'nombre' => $cliente->NOMBRE_CLIENTE,
+                    'direccion' => $cliente->DIRECCION_POSTAL,
+                    'cuenta_bancaria' => $cliente->CUENTA_BANCARIA,
+                    'fecha_alta' => $cliente->FECHA_ALTA
+                ]);
+            }
+
+
+            try {
+                $chunked_new_record_array = array_chunk($clientesArray, 6000, true);
+
+                foreach ($chunked_new_record_array as $new_record_chunk) {
+                    Cliente::insert($new_record_chunk);
+                }
+            } catch (\Throwable $th) {
+                Alert::error('Error', 'Ya existe un usuario con ese id en el archivo: ' . $nombreArchivo);
+                return response()->json(['message' => 'Ya existe un usuario con ese id en el archivo']);
+            }
+            Alert::success('Subido', 'Los achivos se han subido correctamente');
+            return response()->json(['message' => 'Los achivos se han subido correctamente']);
+        }
+    }
+    public function getUploadProgress(Request $request)
+    {
+        $sessionKey = 'upload_progress_' . $request->input('upload_key');
+
+        $uploadProgress = [
+            'progress' => session($sessionKey . '_progress'),
+            'total' => session($sessionKey . '_total'),
+        ];
+
+        return response()->json($uploadProgress);
     }
 }
 

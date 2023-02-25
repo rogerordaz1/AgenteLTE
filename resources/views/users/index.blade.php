@@ -57,7 +57,7 @@
                                                         @method('DELETE')
 
 
-                                                        <a href="/dashboard/users/{{ $user->id }}" type="button" class="btn btn-info btn-sm">Show</a>
+
                                                         <a href="{{ route('dashboard.users.edit', $user) }}" type="button"
                                                             class="btn btn-primary btn-sm">Editar</a>
 
@@ -123,7 +123,7 @@
 
 
 @section('css')
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css"> --}}
+
 
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} ">
@@ -131,15 +131,7 @@
 @endsection
 
 @section('js')
-    {{-- <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
 
-
-    <script>
-        $(document).ready(function() {
-            $('#users').DataTable();
-        });
-    </script> --}}
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }} "></script>
 
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js ') }}"></script>
@@ -164,17 +156,6 @@
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#users_wrapper .col-md-6:eq(0)');
 
-
-
-            // $('#example2').DataTable({
-            //     "paging": true,
-            //     "lengthChange": false,
-            //     "searching": false,
-            //     "ordering": true,
-            //     "info": true,
-            //     "autoWidth": false,
-            //     "responsive": true,
-            // });
         });
     </script>
 @endsection

@@ -26,19 +26,22 @@ Route::get('/', function () {
 });
 
 Route::resource('/dashboard/users', UserController::class)
-->middleware(['auth' , 'verified'])->names('dashboard.users');
+    ->middleware(['auth', 'verified'])->names('dashboard.users');
 
 Route::resource('/dashboard/roles', RoleController::class)->except('show')
-->middleware(['auth' , 'verified'])->names('dashboard.roles');
+    ->middleware(['auth', 'verified'])->names('dashboard.roles');
 
 Route::resource('/dashboard/ocomerciales', OcomercialeController::class)
-->middleware(['auth' , 'verified'])->names('dashboard.ocomerciales');
+    ->middleware(['auth', 'verified'])->names('dashboard.ocomerciales');
 
 Route::resource('/dashboard/clientes', ClienteController::class)
-->middleware(['auth' , 'verified'])->names('dashboard.clientes');
+    ->middleware(['auth', 'verified'])->names('dashboard.clientes');
 
 Route::resource('/dashboard/agentes', AgenteController::class)
-->middleware(['auth' , 'verified'])->names('dashboard.agentes');
+    ->middleware(['auth', 'verified'])->names('dashboard.agentes');
+
+Route::match(['put', 'patch'], '/dashboard/agentes/addCliente/{agente}', [AgenteController::class, 'addCliente'])->name('dashboard.agentes.addCliente');
+Route::match(['put', 'patch'], '/dashboard/agentes/removeCliente/{agente}', [AgenteController::class, 'removeCliente'])->name('dashboard.agentes.removeCliente');
 
 
 Route::get('/dashboard', function () {
@@ -51,20 +54,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard/xmlfiles', [XmlFileController::class , 'index'])->middleware(['auth' , 'verified'])->name('dashboard.xmlfile');
+Route::get('/dashboard/xmlfiles', [XmlFileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.xmlfile');
 
-Route::post('/dashboard/file/clientes', [XmlFileController::class , 'clientes'])->middleware(['auth' , 'verified'])->name('dashboard.file.clientes');
-Route::post('/dashboard/file/facturas', [XmlFileController::class , 'facturas'])->middleware(['auth' , 'verified'])->name('dashboard.file.facturas');
-Route::post('/dashboard/file/agentes', [XmlFileController::class , 'agentes'])->middleware(['auth' , 'verified'])->name('dashboard.file.agentes');
+Route::post('/dashboard/file/clientes/prueba', [XmlFileController::class, 'upload'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes_prueba');
 
-
-Route::get('datatable/clientes', [DatatableController::class , 'clientes'])->name('datatable.clientes');
-Route::get('datatable/agentes', [DatatableController::class , 'agentes'])->name('datatable.agentes');
-Route::get('datatable/clientes-agente/{agente}', [DatatableController::class , 'clientes_agente'])->name('datatable.cliente-agente');
-
-Route::get('dashboard/select/clientes', [AgenteController::class , 'selectClientes'])->name('dashboard.select.clientes');
+Route::post('/dashboard/file/clientes', [XmlFileController::class, 'clientes'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes');
+Route::post('/dashboard/file/facturas', [XmlFileController::class, 'facturas'])->middleware(['auth', 'verified'])->name('dashboard.file.facturas');
+Route::post('/dashboard/file/agentes', [XmlFileController::class, 'agentes'])->middleware(['auth', 'verified'])->name('dashboard.file.agentes');
+Route::get('/dashboard/file/vaciarFacturas', [XmlFileController::class, 'vaciarFacturas'])->middleware(['auth', 'verified'])->name('dashboard.file.vaciarFacturas');
 
 
+Route::get('/datatable/clientes', [DatatableController::class, 'clientes'])->name('datatable.clientes');
+Route::get('/datatable/agentes', [DatatableController::class, 'agentes'])->name('datatable.agentes');
+Route::get('/datatable/clientes-agente/{agente}', [DatatableController::class, 'clientes_agente'])->name('datatable.cliente-agente');
+
+Route::get('/dashboard/select/clientes', [AgenteController::class, 'selectClientes'])->name('dashboard.select.clientes');
 
 
-require __DIR__.'/auth.php';
+Route::get('/progress', [XmlFileController::class, 'getUploadProgress']);
+
+require __DIR__ . '/auth.php';
