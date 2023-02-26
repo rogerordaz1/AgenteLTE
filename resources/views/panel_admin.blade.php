@@ -21,7 +21,7 @@
             <!-- /.sidebar -->
 
 
-            
+
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
@@ -33,9 +33,11 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container-fluid">
-                    
+
 
                     <x-row-cards-count/>
+
+                    <x-custom-card-row/>
 
                     @yield('contenido')
                 </div><!-- /.container-fluid -->
@@ -57,13 +59,13 @@
         <!-- Main Footer -->
         <footer class="main-footer">
             <!-- To the right -->
-            
+
             <!-- Default to the left -->
             <strong>Copyright &copy; 2023 <a href="/">Etecsa</a>.</strong> Todos los derechos reservados.
         </footer>
     </div>
     <!-- ./wrapper -->
-   
+
 @endsection
 
 

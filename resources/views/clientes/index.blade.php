@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Facturas de los Clientes</h3>
-                    <div id="buttons"></div>
+                    <div class="d-flex justify-content-end datatable-buttons"> </div>
                 </div>
                 <div class="card-body">
                     <div id="clientes_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -19,7 +19,8 @@
                                         <tr>
                                             <td>
 
-                                                <select data-column="0" class="form-control filter-input" id="filtro-cliente">
+                                                <select data-column="0" class="form-control filter-input"
+                                                    id="filtro-cliente">
                                                     <option value="">Seleciona la Oficina</option>
                                                     @foreach ($ocomerciales as $oficina)
                                                         <option value="{{ $oficina->nombre }}"> {{ $oficina->nombre }}
@@ -126,15 +127,12 @@
         $(function() {
 
             let table = $("#clientes").DataTable({
-                dom: 'B<"col-md-6 col-sm-12">frtip',
-
-                processing: true,
+                // dom: '<"datatable-buttons d-flex justify-content-end mb-3">rtip',
                 ajax: {
                     url: "{{ route('datatable.clientes') }}",
                     dataSrc: 'data'
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'oficina_nombre'
                     },
                     {
@@ -161,13 +159,15 @@
                 ],
 
                 responsive: true,
-                lengthChange: false,
+
                 autoWidth: false,
                 buttons: [
                     "copy", "csv", "excel", "pdf",
 
                 ]
             });
+
+            $(".datatable-buttons").html($("#myTable_wrapper .dt-buttons"));
 
             $('#filtro-cliente').change(function() {
                 table.column($(this).data('column'))
