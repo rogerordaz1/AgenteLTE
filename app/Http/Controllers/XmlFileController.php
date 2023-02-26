@@ -209,26 +209,30 @@ class XmlFileController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
     public function agentes(Request $request)
     {
 
         $files = $request->file('file');
-        if ($request->hasFile('file')) {
+
+        if (!$request->hasFile('file')) {
+            return response()->json([
+                'message' => 'Debe subir al menos 1 archivo.',
+                'header' => 'Upss!!!',
+                'icon' => 'error',
+            ], 400);
+        }
             foreach ($files as $file) {
+
                 $nombreArchivo = $file->getClientOriginalName();
-                $array = explode('.', $nombreArchivo);
-                $ext = end($array);
-                if ($ext == 'xlsx') {
+                $ext = $file->getClientOriginalExtension();
+
+                if (!in_array($ext, ['xlsx'])) {
+                    return response()->json([
+                        'message' => 'EL archivo seleccionado no es un xlsx: ' . $nombreArchivo,
+                        'header' => 'Upss!!!',
+                        'icon' => 'error',
+                    ]);
+                }
                     if ($xls = SimpleXLSX::parse($file)) {
                         $array =  $xls->rows();
                         array_splice($array, 0, 3);
@@ -236,10 +240,7 @@ class XmlFileController extends Controller
                             $id_oficina_comercial =  $item[5];
                             trim($id_oficina_comercial);
                             $id_oficina = substr($id_oficina_comercial, 1, 2);
-                            // print_r($id_oficina);
 
-
-                            // print_r($id_oficina_comercial);
                             $agente = Agente::firstOrCreate([
                                 'id_oficina_comercial' => $id_oficina,
                                 'nombre' => $item[7],
@@ -260,19 +261,20 @@ class XmlFileController extends Controller
                             }
                         }
                     } else {
-                        echo SimpleXLS::parseError();
+                        return response()->json([
+                            'message' => 'No se pudo procesar el archivo: ' . $nombreArchivo,
+                            'header' => 'Upss!!!',
+                            'icon' => 'error',
+                        ]);
                     }
-                } else {
-                    Alert::error('Error', 'EL archivo seleccionado no es un xls: ' . $nombreArchivo);
-                    return back();
-                }
+
             }
-            Alert::success('Subido', 'Los achivos se han subido correctamente');
-            return back();
-        } else {
-            Alert::error('Error', 'Debe subir al menos 1 archivo');
-            return back();
-        }
+            return response()->json([
+                'message' => 'Los achivos se han subido correctamente',
+                'header' => 'Operacion Exitosa',
+                'icon' => 'success',
+            ]);
+
     }
 
 
@@ -283,78 +285,6 @@ class XmlFileController extends Controller
         return back();
     }
 
-
-
-    public function upload(Request $request)
-    {
-
-
-        $files = $request->file('files');
-
-        if (!$request->hasFile('files')) {
-            return response()->json(['message' => 'Debe subir al menos 1 archivo.'], 400);
-        }
-
-        foreach ($files as $file) {
-
-            $nombreArchivo = $file->getClientOriginalName();
-            $ext = $file->getClientOriginalExtension();
-            if (!in_array($ext, ['xml', 'xsd'])) {
-                return response()->json(['message' => 'EL archivo seleccionado no es un xml o xsd' . $nombreArchivo]);
-            }
-
-            $clientesXML  =  simplexml_load_file($file);
-            $clientesArray = [];
-            foreach ($clientesXML as $cliente) {
-
-                $clienteEspecifico = Cliente::where('servicio', $cliente->SERVICIO)->first();
-                if ($clienteEspecifico) {
-                    continue;
-                }
-
-
-                if ($cliente->ID_SECTOR == 'RT') {
-                    continue;
-                }
-
-                array_push($clientesArray, [
-                    'id_oficina_comercial' => $cliente->ID_OFICINA_COMERCIAL,
-                    'servicio' => $cliente->SERVICIO,
-                    'agrupacion' => $cliente->ID_AGRUPACION,
-                    'sector' => $cliente->ID_SECTOR,
-                    'nombre' => $cliente->NOMBRE_CLIENTE,
-                    'direccion' => $cliente->DIRECCION_POSTAL,
-                    'cuenta_bancaria' => $cliente->CUENTA_BANCARIA,
-                    'fecha_alta' => $cliente->FECHA_ALTA
-                ]);
-            }
-
-
-            try {
-                $chunked_new_record_array = array_chunk($clientesArray, 6000, true);
-
-                foreach ($chunked_new_record_array as $new_record_chunk) {
-                    Cliente::insert($new_record_chunk);
-                }
-            } catch (\Throwable $th) {
-
-                return response()->json(['message' => 'Ya existe un usuario con ese id en el archivo' . $nombreArchivo]);
-            }
-
-            return response()->json(['message' => 'Los achivos se han subido correctamente']);
-        }
-    }
-    public function getUploadProgress(Request $request)
-    {
-        $sessionKey = 'upload_progress_' . $request->input('upload_key');
-
-        $uploadProgress = [
-            'progress' => session($sessionKey . '_progress'),
-            'total' => session($sessionKey . '_total'),
-        ];
-
-        return response()->json($uploadProgress);
-    }
 }
 
 

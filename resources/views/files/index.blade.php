@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.file.agentes') }}" enctype="multipart/form-data" id="upload-file"
+                    <form action="{{ route('dashboard.file.agentes') }}" enctype="multipart/form-data" id="agentes-upload"
                         method="POST">
                         @csrf
                         <div class="row">
@@ -100,7 +100,14 @@
                             </div>
 
                             <div class="col-md-12">
-                                <button class="btn btn-primary" type="submit">Confirmar</button>
+                                <button class="btn btn-primary" id="confirm-agente" type="submit">
+                                    Confirmar
+                                </button>
+                                <button class="btn btn-primary" id="loading-agente" style="display: none;" type="button"
+                                    disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Cargando...
+                                </button>
                             </div>
                         </div>
 
@@ -232,12 +239,11 @@
                     $('#confirm-factura').show();
                     console.log(response);
                     swal({
-                            title: response.header,
-                            text: response.message,
-                            icon: response.icon,
-                            button: "Cerrar",
-                        }
-                    ).then((value) => {
+                        title: response.header,
+                        text: response.message,
+                        icon: response.icon,
+                        button: "Cerrar",
+                    }).then((value) => {
                         location.reload();
 
                     });
@@ -255,6 +261,64 @@
                         button: "Cerrar",
                     }).then((value) => {
                         location.reload();
+                    });
+
+                },
+
+            });
+        });
+    </script>
+    {{-- Este es el script de los agentes --}}
+    <script>
+        $('#agentes-upload').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '{{ route('dashboard.file.agentes') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    console.log('Antes de enviar');
+                    // Muestra el indicador de carga
+                    $('#loading-agente').show();
+                    $('#confirm-agente').hide();
+                },
+                success: function(response) {
+                    // Maneja la respuesta del servidor
+                    $('#loading-agente').hide();
+                    $('#confirm-agente').show();
+                    console.log(response);
+
+                    swal({
+                            title: response.header,
+                            text: response.message,
+                            icon: response.icon,
+                            button: "Cerrar",
+                        }
+
+                    ).then((value) => {
+                        location.reload();
+
+                    });
+
+
+                },
+                error: function(xhr, status, error) {
+                    // Maneja los errores
+                    $('#confirm-agente').show();
+                    $('#loading-agente').hide();
+                    console.log(error);
+
+                    swal({
+                        title: "Ha Occurrido algun Error",
+                        text: error,
+                        icon: 'error',
+                        button: "Cerrar",
+                    }).then((value) => {
+                        location.reload();
+
                     });
 
                 },
