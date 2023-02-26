@@ -56,17 +56,15 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/dashboard/xmlfiles', [XmlFileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.xmlfile');
 
-// Route::post('/dashboard/file/clientes/prueba', [XmlFileController::class, 'upload'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes_prueba');
-
 Route::post('/dashboard/file/clientes', [XmlFileController::class, 'clientes'])->middleware(['auth', 'verified'])->name('dashboard.file.clientes');
 Route::post('/dashboard/file/facturas', [XmlFileController::class, 'facturas'])->middleware(['auth', 'verified'])->name('dashboard.file.facturas');
 Route::post('/dashboard/file/agentes', [XmlFileController::class, 'agentes'])->middleware(['auth', 'verified'])->name('dashboard.file.agentes');
 Route::get('/dashboard/file/vaciarFacturas', [XmlFileController::class, 'vaciarFacturas'])->middleware(['auth', 'verified'])->name('dashboard.file.vaciarFacturas');
 
 
-Route::get('/datatable/clientes', [DatatableController::class, 'clientes'])->name('datatable.clientes');
-Route::get('/datatable/agentes', [DatatableController::class, 'agentes'])->name('datatable.agentes');
-Route::get('/datatable/clientes-agente/{agente}', [DatatableController::class, 'clientes_agente'])->name('datatable.cliente-agente');
+Route::get('datatable/clientes', [DatatableController::class, 'clientes'])->name('datatable.clientes');
+Route::get('datatable/agentes', [DatatableController::class, 'agentes'])->name('datatable.agentes');
+Route::get('datatable/clientes-agente/{agente}', [DatatableController::class, 'clientes_agente'])->name('datatable.cliente-agente');
 
 Route::get('/dashboard/select/clientes', [AgenteController::class, 'selectClientes'])->name('dashboard.select.clientes');
 

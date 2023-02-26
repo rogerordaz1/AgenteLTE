@@ -19,6 +19,7 @@ class Factura extends Model
         'nombre_cliente',
         'servicio_cliente',
         'total',
+        'atraso',
 
     ];
 

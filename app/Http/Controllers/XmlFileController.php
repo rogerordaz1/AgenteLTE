@@ -134,6 +134,7 @@ class XmlFileController extends Controller
             $facturasXML  =  simplexml_load_file($file);
             $facturasArray = json_decode(json_encode($facturasXML), true)['ROW'] ?? [];
             $facturasArrayToDB = [];
+
             sort($facturasArray);
             for ($i = 0; $i < count($facturasArray); $i++) {
                 $indice = 0;
@@ -152,7 +153,9 @@ class XmlFileController extends Controller
                 }
                 $servicio = '';
                 $total = array_sum(array_column($agrupacion, 'TOTAL'));
+                $atraso = array_sum(array_column($agrupacion, 'ATRASOS'));
                 foreach ($agrupacion as $item) {
+
                     if (isset($item['SERVICIO']) && !empty($item['SERVICIO'])) {
                         if ($item['ACTIVO'] == "T" || $item['ACTIVO'] == "F") {
                             continue;
@@ -163,12 +166,13 @@ class XmlFileController extends Controller
                 if ($servicio == '') {
                     continue;
                 }
-                // anadir otro campo que seria el atraso..........
+
 
                 // Anadir una validacion para verificar que la factura no c encuentre en la database...
                 $facturaExiste = Factura::where('no_factura', $facturasArray[$i]['NO_FACTURA'])->first();
                 if ($facturaExiste) {
-                    continue;
+                    // si quiero hacerlo nada mas que encuentre una factura puedo poner el break;
+                    break;
                 }
                 array_push($facturasArrayToDB,  [
                     'oficina'          => gettype($facturasArray[$i]['OFICINA'])    == 'array' ? '' : $facturasArray[$i]['OFICINA'],
@@ -177,6 +181,7 @@ class XmlFileController extends Controller
                     'no_factura'       => gettype($facturasArray[$i]['NO_FACTURA']) == 'array' ? '' : $facturasArray[$i]['NO_FACTURA'],
                     'nombre_cliente'   => gettype($facturasArray[$i]['NOMBRE'])     == 'array' ? '' : $facturasArray[$i]['NOMBRE'],
                     'servicio_cliente' => $servicio,
+                    'atraso'           => $atraso,
                     'total'            => $total,
                 ]);
             }

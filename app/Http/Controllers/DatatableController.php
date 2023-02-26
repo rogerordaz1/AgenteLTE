@@ -14,9 +14,28 @@ class DatatableController extends Controller
 {
     public function clientes()
     {
+        $facturas = Factura::with('cliente')->get();
 
-        return DataTables::of(Factura::all())
 
+        return DataTables::of($facturas)
+            ->addColumn('oficina_nombre', function ($factura) {
+                return $factura->cliente->ocomercial->nombre;
+            })
+            ->toJson();
+    }
+
+    public function agentes()
+    {
+        $agentes = Agente::with('ocomercial')->get();
+
+
+
+        return DataTables::of($agentes)
+            ->addColumn('oficina_nombre', function ($agente) {
+                return $agente->ocomercial->nombre;
+            })
+            ->addColumn('show_clients', '<a href="{{route(\'dashboard.agentes.show\',$id)}}" type="button" class="btn btn-info btn-sm">' . ('Ver Clientes') . '</a>')
+            ->rawColumns(['show_clients'])
             ->toJson();
     }
     public function clientes_agente(Agente $agente)
@@ -61,22 +80,6 @@ class DatatableController extends Controller
                 ';
             })
             ->rawColumns(['unlink_client'])
-            ->toJson();
-    }
-
-
-    public function agentes()
-    {
-        $agentes = Agente::with('ocomercial')->get();
-
-
-
-        return DataTables::of($agentes)
-            ->addColumn('oficina_nombre', function ($agente) {
-                return $agente->ocomercial->nombre;
-            })
-            ->addColumn('show_clients', '<a href="{{route(\'dashboard.agentes.show\',$id)}}" type="button" class="btn btn-info btn-sm">' . ('Ver Clientes') . '</a>')
-            ->rawColumns(['show_clients'])
             ->toJson();
     }
 }

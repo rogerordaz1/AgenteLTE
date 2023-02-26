@@ -17,6 +17,26 @@
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
+                                            <td>
+
+                                                <select data-column="0" class="form-control filter-input" id="filtro-cliente">
+                                                    <option value="">Seleciona la Oficina</option>
+                                                    @foreach ($ocomerciales as $oficina)
+                                                        <option value="{{ $oficina->nombre }}"> {{ $oficina->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending"> Oficina
@@ -27,7 +47,8 @@
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Agrupacion
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                Agrupacion
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
@@ -43,7 +64,11 @@
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">TOTAL
+                                                style="">Atraso
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                style="">Total
                                             </th>
 
 
@@ -51,13 +76,14 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th rowspan="1" colspan="1" >Oficina</th>
-                                            <th rowspan="1" colspan="1" >Nombre</th>
-                                            <th rowspan="1" colspan="1" >Agrupacion</th>
-                                            <th rowspan="1" colspan="1" >Cuenta</th>
-                                            <th rowspan="1" colspan="1" >#Factura</th>
-                                            <th rowspan="1" colspan="1" >Servicio</th>
-                                            <th rowspan="1" colspan="1" >TOTAL</th>
+                                            <th rowspan="1" colspan="1">Oficina</th>
+                                            <th rowspan="1" colspan="1">Nombre</th>
+                                            <th rowspan="1" colspan="1">Agrupacion</th>
+                                            <th rowspan="1" colspan="1">Cuenta</th>
+                                            <th rowspan="1" colspan="1">#Factura</th>
+                                            <th rowspan="1" colspan="1">Servicio</th>
+                                            <th rowspan="1" colspan="1">Atraso</th>
+                                            <th rowspan="1" colspan="1">Total</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -101,13 +127,15 @@
 
             let table = $("#clientes").DataTable({
                 dom: 'B<"col-md-6 col-sm-12">frtip',
+
+                processing: true,
                 ajax: {
                     url: "{{ route('datatable.clientes') }}",
                     dataSrc: 'data'
                 },
                 columns: [
                     {
-                        data: 'oficina'
+                        data: 'oficina_nombre'
                     },
                     {
                         data: 'nombre_cliente'
@@ -121,16 +149,17 @@
                     {
                         data: 'no_factura'
                     },
-
                     {
                         data: 'servicio_cliente'
+                    },
+                    {
+                        data: 'atraso'
                     },
                     {
                         data: 'total'
                     },
                 ],
-                processing: true,
-                serverSide: true,
+
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
@@ -140,9 +169,12 @@
                 ]
             });
 
+            $('#filtro-cliente').change(function() {
+                table.column($(this).data('column'))
+                    .search($(this).val())
+                    .draw();
+            });
 
         });
-
-
     </script>
 @endsection

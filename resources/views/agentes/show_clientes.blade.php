@@ -46,7 +46,11 @@
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
-                                                style="">TOTAL
+                                                style="">Atraso
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                style="">Total
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
@@ -64,7 +68,8 @@
                                             <th rowspan="1" colspan="1">Cuenta</th>
                                             <th rowspan="1" colspan="1">#Factura</th>
                                             <th rowspan="1" colspan="1">Servicio</th>
-                                            <th rowspan="1" colspan="1">TOTAL</th>
+                                            <th rowspan="1" colspan="1">Atraso</th>
+                                            <th rowspan="1" colspan="1">Total</th>
                                             <th rowspan="1" colspan="1">Utilidad</th>
                                         </tr>
 
@@ -195,6 +200,9 @@
                         data: 'servicio_cliente'
                     },
                     {
+                        data: 'atraso'
+                    },
+                    {
                         data: 'total'
                     },
                     {
@@ -210,7 +218,7 @@
                         extend: 'pdf',
                         text: 'PDF',
                         exportOptions: {
-                            columns: [0, 1, 4, 5, 6]
+                            columns: [0, 1, 4, 5, 6,7]
 
                         }
                     },
@@ -218,7 +226,7 @@
                         extend: 'excel',
                         text: 'Exel',
                         exportOptions: {
-                            columns: [0, 1, 4, 5, 6]
+                            columns: [0, 1, 4, 5, 6,7]
 
                         }
                     },
@@ -226,7 +234,7 @@
                         extend: 'copy',
                         text: 'Copiar Contenido',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6]
+                            columns: [0, 1, 2, 3, 4, 5, 6,7]
 
                         }
                     },
@@ -234,7 +242,7 @@
                         extend: 'csv',
                         text: 'CSV',
                         exportOptions: {
-                            columns: [5, 6]
+                            columns: [5, 7]
                         }
                     },
 

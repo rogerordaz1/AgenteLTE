@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nombre_cliente');
             $table->string('servicio_cliente')->nullable();
             $table->foreign('servicio_cliente')->references('servicio')->on('clientes');
+            $table->float('atraso');
             $table->float('total');
             $table->timestamps();
         });

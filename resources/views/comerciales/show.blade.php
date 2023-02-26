@@ -20,12 +20,10 @@
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Id </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending"> Id OC
+                                                aria-label="Rendering engine: activate to sort column descending"> Oficina Comercial
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
@@ -51,32 +49,25 @@
                                     <tbody>
                                         @foreach ($clientes as $cliente)
                                             <tr class="even">
-                                                <td class="dtr-control sorting_1" tabindex="0">{{ $cliente->id }}</td>
-                                                <td style="">{{ $cliente->id_oficina_comercial }}</td>
+                                                <td style="">{{ $cliente->ocomercial->nombre }}</td>
                                                 <td style="">{{ $cliente->servicio }}</td>
                                                 <td style="">{{ $cliente->sector }}</td>
                                                 <td style=""> {{ $cliente->nombre }} </td>
                                                 <td style=""> {{ $cliente->direccion }}</td>
                                                 <td style=""> {{ $cliente->cuenta_bancaria }}</td>
                                                 <td style=""> {{ $cliente->fecha_alta }}</td>
-                                                   
-                                               
-                                                
                                             </tr>
                                         @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th rowspan="1" colspan="1" style="">ID</th>
-                                            <th rowspan="1" colspan="1" style="">Id OC</th>
+                                            <th rowspan="1" colspan="1" style="">Oficina Comercial</th>
                                             <th rowspan="1" colspan="1" style="">Servicio</th>
                                             <th rowspan="1" colspan="1" style="">Sector</th>
                                             <th rowspan="1" colspan="1">Nombre</th>
                                             <th rowspan="1" colspan="1" style="">Direccion</th>
                                             <th rowspan="1" colspan="1" style="">Cuenta Bancaria</th>
                                             <th rowspan="1" colspan="1" style="">Fecha alta</th>
-                                         
-
                                         </tr>
                                     </tfoot>
                                 </table>
