@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Agentes</h3>
-                    <div id="buttons"></div>
+                    <div class="d-flex justify-content-end datatable-buttons"> </div>
 
                 </div>
                 <div class="card-body">
@@ -112,7 +112,8 @@
         $(function() {
 
             let table = $("#agentes").DataTable({
-                dom: 'B<"col-md-6 col-sm-12">frtip',
+                dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                 ajax: {
                     url: "{{ route('datatable.agentes') }}",
                     dataSrc: 'data'
@@ -135,16 +136,65 @@
                         data: 'show_clients'
                     },
                 ],
-                serverside: true,
                 responsive: true,
-                lengthChange: false,
                 autoWidth: false,
-                buttons: [
-                    "copy", "csv", "excel", "pdf",
-                ]
+                buttons: [{
+                        extend: 'pdf',
+                        text: 'PDF',
+                        titleAttr: 'Exportar a PDF',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Exel',
+                        titleAttr: 'Exportar a EXEL',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
+                    },
+                    {
+                        extend: 'copy',
+                        text: 'Copiar',
+                        titleAttr: 'Copiar el Contenido',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV',
+                        titleAttr: 'Exportar a CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
+                    },
+                ],
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "Nada encontrado - disculpa",
+                    "info": "Mostrando la pagina _PAGE_ de _PAGES_ con _TOTAL_ registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "loadingRecords": "Cargando Datos Por favor espere...",
+
+                }
             });
 
-
+            table.buttons().container().appendTo($('.datatable-buttons'));
 
             $('#filtro').change(function() {
                 table.column($(this).data('column'))

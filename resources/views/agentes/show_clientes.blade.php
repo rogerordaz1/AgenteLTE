@@ -7,8 +7,11 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Facturas de los clientes de : {{ $agente->nombre }}</h3>
-                    <div class="d-flex justify-content-end">
-                        <a href="{{route('dashboard.agentes.edit' , $agente )}}" type="button" class="btn btn-info btn-sm ml-auto">Adicionar Cliente</a>
+                    <div class="d-flex justify-content-end datatable-buttons">
+
+                        <a href="{{ route('dashboard.agentes.edit', $agente) }}" type="button"
+                            class="btn btn-info btn-sm ml-auto mr-1">Adicionar Cliente</a>
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -175,7 +178,8 @@
     <script>
         $(function() {
             let table = $("#clientes-agente").DataTable({
-                dom: 'B<"col-md-6 col-sm-12">frtip',
+                dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                 ajax: {
                     url: "{{ route('datatable.cliente-agente', $agente) }}",
                     dataSrc: 'data'
@@ -209,55 +213,85 @@
                         data: 'unlink_client'
                     },
                 ],
-                processing: true,
-                serverSide: true,
                 responsive: true,
-                lengthChange: false,
                 autoWidth: false,
                 buttons: [{
                         extend: 'pdf',
                         text: 'PDF',
+                        titleAttr: 'Exportar a PDF',
                         exportOptions: {
-                            columns: [0, 1, 4, 5, 6,7]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
 
-                        }
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
                     },
                     {
                         extend: 'excel',
                         text: 'Exel',
+                        titleAttr: 'Exportar a EXEL',
                         exportOptions: {
-                            columns: [0, 1, 4, 5, 6,7]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
 
-                        }
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
                     },
                     {
                         extend: 'copy',
-                        text: 'Copiar Contenido',
+                        text: 'Copiar',
+                        titleAttr: 'Copiar el Contenido',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6,7]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
 
-                        }
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
                     },
                     {
                         extend: 'csv',
                         text: 'CSV',
+                        titleAttr: 'Exportar a CSV',
                         exportOptions: {
                             columns: [5, 7]
-                        }
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
                     },
+                ],
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "Nada encontrado - disculpa",
+                    "info": "Mostrando la pagina _PAGE_ de _PAGES_ con _TOTAL_ registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "loadingRecords": "Cargando Datos Por favor espere...",
 
-
-                ]
+                }
             });
 
-
+            table.buttons().container().appendTo($('.datatable-buttons'));
         });
 
         $("#nagregados").DataTable({
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#nagregados_wrapper .col-md-6:eq(0)');
+            language: {
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "Nada encontrado - disculpa",
+                "info": "Mostrando la pagina _PAGE_ de _PAGES_ con _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "paginate": {
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "loadingRecords": "Cargando Datos Por favor espere...",
+
+            }
+        });
     </script>
 @endsection
