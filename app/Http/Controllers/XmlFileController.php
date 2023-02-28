@@ -158,6 +158,11 @@ class XmlFileController extends Controller
 
                     if (isset($item['SERVICIO']) && !empty($item['SERVICIO'])) {
                         if ($item['ACTIVO'] == "T" || $item['ACTIVO'] == "F") {
+                            // Hay que prebaor este  codigo de aqui abajo a ver si sirve asi me imagino que si...
+                            $cliente = Cliente::where('servicio', $item['ACTIVO'])->first();
+                            if (!empty($cliente)) {
+                                $cliente->delete();
+                            }
                             continue;
                         }
                         $servicio = $item['SERVICIO'] ?? null;
@@ -221,60 +226,58 @@ class XmlFileController extends Controller
                 'icon' => 'error',
             ], 400);
         }
-            foreach ($files as $file) {
+        foreach ($files as $file) {
 
-                $nombreArchivo = $file->getClientOriginalName();
-                $ext = $file->getClientOriginalExtension();
+            $nombreArchivo = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
 
-                if (!in_array($ext, ['xlsx'])) {
-                    return response()->json([
-                        'message' => 'EL archivo seleccionado no es un xlsx: ' . $nombreArchivo,
-                        'header' => 'Upss!!!',
-                        'icon' => 'error',
+            if (!in_array($ext, ['xlsx'])) {
+                return response()->json([
+                    'message' => 'EL archivo seleccionado no es un xlsx: ' . $nombreArchivo,
+                    'header' => 'Upss!!!',
+                    'icon' => 'error',
+                ]);
+            }
+            if ($xls = SimpleXLSX::parse($file)) {
+                $array =  $xls->rows();
+                array_splice($array, 0, 3);
+                foreach ($array as $item) {
+                    $id_oficina_comercial =  $item[5];
+                    trim($id_oficina_comercial);
+                    $id_oficina = substr($id_oficina_comercial, 1, 2);
+
+                    $agente = Agente::firstOrCreate([
+                        'id_oficina_comercial' => $id_oficina,
+                        'nombre' => $item[7],
                     ]);
-                }
-                    if ($xls = SimpleXLSX::parse($file)) {
-                        $array =  $xls->rows();
-                        array_splice($array, 0, 3);
-                        foreach ($array as $item) {
-                            $id_oficina_comercial =  $item[5];
-                            trim($id_oficina_comercial);
-                            $id_oficina = substr($id_oficina_comercial, 1, 2);
-
-                            $agente = Agente::firstOrCreate([
-                                'id_oficina_comercial' => $id_oficina,
-                                'nombre' => $item[7],
-                            ]);
 
 
-                            $cliente  =  Cliente::where('servicio', $item[4])->first();
+                    $cliente  =  Cliente::where('servicio', $item[4])->first();
 
-                            if (!empty($cliente)) {
-                                $cliente->id_agente = $agente->id;
-                                $cliente->save();
-                            } else {
-                                //salvar en la base de datos los clientes que no existan en la base de datos
-                                NAgredado::create([
-                                    'id_agente' => $agente->id,
-                                    'servicio' => $item[4],
-                                ]);
-                            }
-                        }
+                    if (!empty($cliente)) {
+                        $cliente->id_agente = $agente->id;
+                        $cliente->save();
                     } else {
-                        return response()->json([
-                            'message' => 'No se pudo procesar el archivo: ' . $nombreArchivo,
-                            'header' => 'Upss!!!',
-                            'icon' => 'error',
+
+                        NAgredado::updateOrCreate([
+                            'id_agente' => $agente->id,
+                            'servicio' => $item[4],
                         ]);
                     }
-
+                }
+            } else {
+                return response()->json([
+                    'message' => 'No se pudo procesar el archivo: ' . $nombreArchivo,
+                    'header' => 'Upss!!!',
+                    'icon' => 'error',
+                ]);
             }
-            return response()->json([
-                'message' => 'Los achivos se han subido correctamente',
-                'header' => 'Operacion Exitosa',
-                'icon' => 'success',
-            ]);
-
+        }
+        return response()->json([
+            'message' => 'Los achivos se han subido correctamente',
+            'header' => 'Operacion Exitosa',
+            'icon' => 'success',
+        ]);
     }
 
 
@@ -284,7 +287,6 @@ class XmlFileController extends Controller
         Alert::success('Vaciado Correctamente', 'las facturas se han eliminado correctamente');
         return back();
     }
-
 }
 
 

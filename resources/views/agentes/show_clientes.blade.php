@@ -121,12 +121,12 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($agente->nagregados as $nagregado)
-                                                <td style="">{{ $nagregado->nombre }}</td>
-                                                <td style="">{{ $agente->nombre }}</td>
-                                                <td style="">{{ $nagregado->servicio }}</td>
+                                                <tr>
+                                                    <td style="">{{ $nagregado->nombre }}</td>
+                                                    <td style="">{{ $agente->nombre }}</td>
+                                                    <td style="">{{ $nagregado->servicio }}</td>
+                                                </tr>
                                             @endforeach
-                                            <tr>
-                                            </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -199,7 +199,6 @@
                     {
                         data: 'no_factura'
                     },
-
                     {
                         data: 'servicio_cliente'
                     },
@@ -221,7 +220,6 @@
                         titleAttr: 'Exportar a PDF',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5, 6, 7]
-
                         },
                         className: 'btn btn-warning btn-sm mr-1'
                     },
@@ -252,7 +250,34 @@
                         exportOptions: {
                             columns: [5, 7]
                         },
-                        className: 'btn btn-warning btn-sm mr-1'
+                        customize: function(csv) {
+                            // Obtiene el contenido del CSV sin el encabezado
+                            var rows = csv.split('\n').slice(1);
+
+                            // Recorre cada fila del CSV y obtiene los valores de las columnas "número de teléfono" y "total a pagar"
+                            for (var i = 0; i < rows.length; i++) {
+                                var cols = rows[i].split(',');
+                                var telefono = cols[0].replace(/"/g, '');
+                                var total = cols[1].replace(/"/g, '');;
+
+
+
+
+                                // Crea una nueva fila con el formato "número de teléfono, CUP, total a pagar"
+                                var newRow = telefono + ',CUP,' + total;
+
+                                // Reemplaza la fila original con la nueva fila
+                                rows[i] = newRow;
+                            }
+
+                            // Une las filas modificadas con el encabezado personalizado
+                            var newCsv =  rows.join('\n');
+
+                            // Devuelve el CSV modificado
+                            return newCsv;
+                        },
+                        className: 'btn btn-warning btn-sm mr-1',
+
                     },
                 ],
                 language: {
@@ -268,7 +293,7 @@
                     },
                     "loadingRecords": "Cargando Datos Por favor espere...",
 
-                }
+                },
             });
 
             table.buttons().container().appendTo($('.datatable-buttons'));
@@ -290,7 +315,6 @@
                     "previous": "Anterior"
                 },
                 "loadingRecords": "Cargando Datos Por favor espere...",
-
             }
         });
     </script>

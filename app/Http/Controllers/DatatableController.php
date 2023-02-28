@@ -42,16 +42,13 @@ class DatatableController extends Controller
     {;
 
         $facturas = collect();
-        foreach ($agente->clientes as $key => $cliente) {
+        foreach ($agente->clientes as $cliente) {
             $facturas->push($cliente->factura);
         }
 
         return DataTables::collection($facturas)
             ->addColumn('unlink_client', function ($facturas) {
-                // return '<a href="{{route(\'dashboard.agentes.removeCliente\',$id)}}" type="button" class="btn btn-warning btn-sm">' . ('Eliminar') . '</a>';
-
                 $url = route('dashboard.agentes.removeCliente', $facturas->cliente->id);
-
                 return '
                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#confirm-delete-' . $facturas->cliente->id . '">' . __("Eliminar") . '</button>
                     <div class="modal fade" id="confirm-delete-' . $facturas->cliente->id . '" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-label-' . $facturas->cliente->id . '">
