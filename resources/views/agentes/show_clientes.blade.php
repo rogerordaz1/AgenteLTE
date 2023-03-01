@@ -259,13 +259,8 @@
                                 var cols = rows[i].split(',');
                                 var telefono = cols[0].replace(/"/g, '');
                                 var total = cols[1].replace(/"/g, '');;
-
-
-
-
                                 // Crea una nueva fila con el formato "número de teléfono, CUP, total a pagar"
                                 var newRow = telefono + ',CUP,' + total;
-
                                 // Reemplaza la fila original con la nueva fila
                                 rows[i] = newRow;
                             }
