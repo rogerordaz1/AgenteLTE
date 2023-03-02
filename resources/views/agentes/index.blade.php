@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Agentes</h3>
-                    <div class="d-flex justify-content-end datatable-buttons"> </div>
+                    <div class="d-flex justify-content-end datatable-buttons"></div>
 
                 </div>
                 <div class="card-body">
@@ -127,10 +127,10 @@
                         data: 'nombre'
                     },
                     {
-                        data: 'created_at'
+                        data: 'created_at_diff'
                     },
                     {
-                        data: 'updated_at'
+                        data: 'updated_at_diff'
                     },
                     {
                         data: 'show_clients'

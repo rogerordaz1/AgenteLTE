@@ -34,8 +34,14 @@ class DatatableController extends Controller
             ->addColumn('oficina_nombre', function ($agente) {
                 return $agente->ocomercial->nombre;
             })
-            ->addColumn('show_clients', '<a href="{{route(\'dashboard.agentes.show\',$id)}}" type="button" class="btn btn-info btn-sm">' . ('Ver Clientes') . '</a>')
-            ->rawColumns(['show_clients'])
+            ->addColumn('created_at_diff', function ($agente) {
+                return $agente->created_at->diffForHumans();
+            })
+            ->addColumn('updated_at_diff', function ($agente) {
+                return $agente->updated_at->diffForHumans();
+            })
+            ->addColumn('show_clients', '<a href="{{route(\'dashboard.agentes.show\',$id)}}" type="button" class="btn btn-outline-primary btn-sm">' . ('Ver Clientes') . '</a>')
+            ->rawColumns(['show_clients' , 'created_at_diff' , 'updated_at_diff' ])
             ->toJson();
     }
     public function clientes_agente(Agente $agente)
@@ -50,7 +56,7 @@ class DatatableController extends Controller
             ->addColumn('unlink_client', function ($facturas) {
                 $url = route('dashboard.agentes.removeCliente', $facturas->cliente->id);
                 return '
-                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#confirm-delete-' . $facturas->cliente->id . '">' . __("Eliminar") . '</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#confirm-delete-' . $facturas->cliente->id . '">' . __("Eliminar") . '</button>
                     <div class="modal fade" id="confirm-delete-' . $facturas->cliente->id . '" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-label-' . $facturas->cliente->id . '">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -68,7 +74,7 @@ class DatatableController extends Controller
                                     <form action="' . $url . '" method="POST">
                                         ' . csrf_field() . '
                                         ' . method_field('PUT') . '
-                                        <button type="submit" class="btn btn-warning">' . __("Quitar") . '</button>
+                                        <button type="submit" class="btn btn-danger">' . __("Quitar") . '</button>
                                     </form>
                                 </div>
                             </div>

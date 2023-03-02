@@ -1,7 +1,6 @@
 @extends('panel_admin')
 
 @section('contenido')
-    <h2>{{ $comercial->nombre }}</h2>
 
 
     {{--  La DataTablde DE adminlte --}}
@@ -9,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Listado de Clientes de la Oficcina Comercial : {{ $comercial->nombre }}</h3>
+                    <h3 class="card-title">Listado de clientes de la oficcina comercial : {{ $comercial->nombre }}</h3>
                 </div>
 
                 <div class="card-body">
@@ -110,10 +109,10 @@
         $(function() {
             $("#comerciales").DataTable({
                 "responsive": true,
-                "lengthChange": false,
+
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#comerciales_wrapper .col-md-6:eq(0)');
+
+            });
 
         });
     </script>

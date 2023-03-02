@@ -10,7 +10,11 @@
                     <div class="d-flex justify-content-end datatable-buttons">
 
                         <a href="{{ route('dashboard.agentes.edit', $agente) }}" type="button"
-                            class="btn btn-info btn-sm ml-auto mr-1">Adicionar Cliente</a>
+                            class="btn btn-outline-primary btn-sm ml-auto mr-1">
+
+                            Adicionar Cliente
+
+                        </a>
 
                     </div>
                 </div>
@@ -214,12 +218,24 @@
                 ],
                 responsive: true,
                 autoWidth: false,
-                buttons: [{
+                buttons: [
+
+                    {
+                        extend: 'copy',
+                        text: 'Copiar',
+                        titleAttr: 'Copiar el Contenido',
+                        exportOptions: {
+                            columns: [0, 1, 2, 4, 5, 6, 7]
+
+                        },
+                        className: 'btn btn-warning btn-sm mr-1'
+                    },
+                    {
                         extend: 'pdf',
                         text: 'PDF',
                         titleAttr: 'Exportar a PDF',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                            columns: [0, 1, 2, 4, 5, 6, 7]
                         },
                         className: 'btn btn-warning btn-sm mr-1'
                     },
@@ -228,17 +244,18 @@
                         text: 'Exel',
                         titleAttr: 'Exportar a EXEL',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                            columns: [0, 1, 2,  4, 5, 6, 7]
 
                         },
                         className: 'btn btn-warning btn-sm mr-1'
                     },
+
                     {
-                        extend: 'copy',
-                        text: 'Copiar',
+                        extend: 'print',
+                        text: 'Imprimir',
                         titleAttr: 'Copiar el Contenido',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                            columns: [0, 1, 2,  4, 5, 6, 7]
 
                         },
                         className: 'btn btn-warning btn-sm mr-1'
@@ -266,7 +283,7 @@
                             }
 
                             // Une las filas modificadas con el encabezado personalizado
-                            var newCsv =  rows.join('\n');
+                            var newCsv = rows.join('\n');
 
                             // Devuelve el CSV modificado
                             return newCsv;

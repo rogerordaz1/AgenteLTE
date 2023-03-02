@@ -47,7 +47,7 @@
                                                 </td>
                                                 <td style="">
                                                     <a href="{{ route('dashboard.ocomerciales.show', $comercial->id) }}"
-                                                        type="button" class="btn btn-info">Clientes</a>
+                                                        type="button" class="btn btn-outline-primary btn-sm"> Clientes</i></a>
                                                 </td>
 
 
@@ -108,22 +108,21 @@
         $(function() {
             $("#comerciales").DataTable({
                 "responsive": true,
-                "lengthChange": false,
                 "autoWidth": false,
-                "buttons": [
-                    {
-                        extend: 'pdf',
-                        text: 'Exportar a PDF',
-                        exportOptions: {
-                            columns: [1, 2] // Indica las columnas a exportar (la primera y la tercera)
-                        }
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "Nada encontrado - disculpa",
+                    "info": "Mostrando la pagina _PAGE_ de _PAGES_ con _TOTAL_ registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
                     },
-
-                    "copy", "csv", "excel", "print", "colvis"
-
-
-                ]
-            }).buttons().container().appendTo('#comerciales_wrapper .col-md-6:eq(0)');
+                    "loadingRecords": "Cargando Datos Por favor espere...",
+                }
+            });
 
         });
     </script>

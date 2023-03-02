@@ -7,13 +7,16 @@
         </div>
     @endif
 
-    <a href="{{ route('dashboard.roles.create') }}" type="button" class="btn btn-success mb-3">Crear un Rol</a>
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Roles</h3>
+                    <div class="d-flex justify-content-end datatable-buttons">
+                        <a href="{{ route('dashboard.roles.create') }}" type="button" class="btn btn-outline-primary btn-sm">Crear un Rol</a>
+
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -70,12 +73,14 @@
 
 
                                                         <a href="{{ route('dashboard.roles.edit', $rol) }}" type="button"
-                                                            class="btn btn-primary">Editar</a>
+                                                            class="btn btn-outline-primary btn-sm" title="Editar">
+                                                            <i class="fas fa-pen"></i>
+
+                                                        </a>
 
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                            data-target="#modal1{{ $rol->id }}">
-                                                            Eliminar
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Borrar" data-toggle="modal" data-target="#modal1{{ $rol->id }}">
+                                                            <i class="fas fa-trash"></i>
                                                         </button>
 
                                                         <!-- Modal -->
@@ -145,9 +150,9 @@
 @endsection
 
 @section('js')
-   
-    
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }} "></script> 
+
+
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }} "></script>
 
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js ') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -166,9 +171,21 @@
         $(function() {
             $("#rol_tabla").DataTable({
                 "responsive": true,
-                "lengthChange": false,
                 "autoWidth": false,
-               
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "Nada encontrado - disculpa",
+                    "info": "Mostrando la pagina _PAGE_ de _PAGES_ con _TOTAL_ registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "loadingRecords": "Cargando Datos Por favor espere...",
+
+                }
             });
         });
     </script>

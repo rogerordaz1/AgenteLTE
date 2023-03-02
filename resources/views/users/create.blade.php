@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div class="card card-info">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Crear Usuario</h3>
                 </div>
@@ -34,8 +34,8 @@
                             <input type="password" class="form-control" name="pass" id="pass"
                                 placeholder="Contraseña">
                         </div>
-
-                        <div class="input-group mb-3">
+                        <label for="role_id">Roles</label>
+                        <div class="input-group mb-3 mt-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="role_id">Roles</label>
                             </div>
@@ -45,8 +45,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-success">Crear</button>
-                        <a href="{{ route('dashboard.users.store') }}" type="submit" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary btn-sm">Crear</button>
+                        <a href="{{ route('dashboard.users.index') }}" type="submit" class="btn btn-secondary btn-sm">Cancelar</a>
 
                     </form>
                 </div>

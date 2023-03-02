@@ -127,7 +127,7 @@
         $(function() {
 
             let table = $("#clientes").DataTable({
-                dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
                     "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 
                 ajax: {
@@ -161,46 +161,7 @@
                 ],
                 responsive: true,
                 autoWidth: false,
-                buttons: [{
-                        extend: 'pdf',
-                        text: 'PDF',
-                        titleAttr: 'Exportar a PDF',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
 
-                        },
-                        className: 'btn btn-warning btn-sm mr-1'
-                    },
-                    {
-                        extend: 'excel',
-                        text: 'Exel',
-                        titleAttr: 'Exportar a EXEL',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
-
-                        },
-                        className: 'btn btn-warning btn-sm mr-1'
-                    },
-                    {
-                        extend: 'copy',
-                        text: 'Copiar',
-                        titleAttr: 'Copiar el Contenido',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
-
-                        },
-                        className: 'btn btn-warning btn-sm mr-1'
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'CSV',
-                        titleAttr: 'Exportar a CSV',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
-                        },
-                        className: 'btn btn-warning btn-sm mr-1'
-                    },
-                ],
                 language: {
                     "lengthMenu": "Mostrar _MENU_ registros",
                     "zeroRecords": "Nada encontrado - disculpa",
@@ -217,7 +178,7 @@
                 }
             });
 
-            table.buttons().container().appendTo($('.datatable-buttons'));
+
 
 
             $('#filtro-cliente').change(function() {

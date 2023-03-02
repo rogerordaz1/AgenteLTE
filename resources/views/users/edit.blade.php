@@ -62,7 +62,7 @@
 
 
         <div class="col-md-6">
-            <div class="card card-info">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Editar Usuario</h3>
                 </div>
@@ -94,7 +94,7 @@
                             <label for="password">Contraseña nueva</label>
                             <input type="password" name="password" id="password" class="form-control" placeholder="Ingrese la nueva contraseña">
                         </div>
-
+                        <label for="role_id">Roles</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="role_id">Roles</label>
@@ -108,8 +108,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-success btn-sm">Editar</button>
-                        <a href="/dashboard/users" type="submit" class="btn btn-secondary btn-sm">Cancelar</a>
+                        <button type="submit" class="btn btn-primary btn-sm">Editar</button>
+                        <a href="{{ route('dashboard.users.index') }}"  class="btn btn-secondary btn-sm">Cancelar</a>
 
                     </form>
                 </div>

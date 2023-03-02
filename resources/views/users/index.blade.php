@@ -2,13 +2,16 @@
 
 @section('contenido')
 
-    <a href="/dashboard/users/create" type="button" class="btn btn-success mb-3">Crear Usuario</a>
     {{--  La DataTablde DE adminlte --}}
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Usuarios</h3>
+                    <div class="d-flex justify-content-end datatable-buttons">
+                        <a href="{{ route('dashboard.users.create') }}" type="button" class="btn btn-outline-primary btn-sm">Crear Usuario</a>
+
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -28,6 +31,9 @@
                                                 colspan="1" aria-label="Browser: activate to sort column ascending"
                                                 style="">Email</th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                style="">Nombre Usuario</th>
+                                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                                 colspan="1" aria-label="Platform(s): activate to sort column ascending"
                                                 style="">Rol(s)</th>
                                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
@@ -45,6 +51,7 @@
 
                                                 <td class="dtr-control sorting_1" tabindex="0">{{ $user->name }}</td>
                                                 <td style="">{{ $user->email }}</td>
+                                                <td style="">{{ $user->username }}</td>
                                                 <td style="">
                                                     @foreach ($user->roles as $role)
                                                         {{ $role['name'] }}
@@ -52,39 +59,45 @@
                                                 </td>
                                                 <td class="">
 
-                                                    <form action="{{ route('dashboard.users.destroy', $user) }}" method="post">
+                                                    <form action="{{ route('dashboard.users.destroy', $user) }}"
+                                                        method="post">
                                                         @csrf
                                                         @method('DELETE')
 
 
 
-                                                        <a href="{{ route('dashboard.users.edit', $user) }}" type="button"
-                                                            class="btn btn-primary btn-sm">Editar</a>
+                                                        <a href="{{ route('dashboard.users.edit', $user) }}" type="button" title="Editar"
+                                                            class="btn btn-outline-primary btn-sm"><i class="fas fa-pen"></i></a>
 
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                            data-target="#modal1{{ $user->id }}">
-                                                            Eliminar
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Borrar"
+                                                            data-toggle="modal" data-target="#modal1{{ $user->id }}">
+                                                            <i class="fas fa-trash"></i>
                                                         </button>
 
                                                         <!-- Modal -->
-                                                        <div class="modal fade" id="modal1{{ $user->id }}" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalLabel" aria-hidden="true">
+                                                        <div class="modal fade" id="modal1{{ $user->id }}"
+                                                            tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+                                                            aria-hidden="true">
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <h5 class="modal-title" id="modalLabel">Borrar Usuario</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        Estas seguro que desea borrar el usuario: {{ $user->name }}
+                                                                        Estas seguro que desea borrar el usuario:
+                                                                        {{ $user->name }}
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary"
                                                                             data-dismiss="modal">Cancelar</button>
-                                                                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Confirmar</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -101,6 +114,7 @@
                                         <tr>
                                             <th rowspan="1" colspan="1">Nombre</th>
                                             <th rowspan="1" colspan="1" style="">Correo</th>
+                                            <th rowspan="1" colspan="1" style="">Nombre Usuario</th>
                                             <th rowspan="1" colspan="1" style="">Rol(s)</th>
                                             <th rowspan="1" colspan="1" style="">Utilidad</th>
                                         </tr>
@@ -123,15 +137,12 @@
 
 
 @section('css')
-
-
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} ">
     <link rel="stylesheet" href=" {{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }} ">
 @endsection
 
 @section('js')
-
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }} "></script>
 
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js ') }}"></script>
@@ -151,10 +162,23 @@
         $(function() {
             $("#users").DataTable({
                 "responsive": true,
-                "lengthChange": false,
+
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#users_wrapper .col-md-6:eq(0)');
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "Nada encontrado - disculpa",
+                    "info": "Mostrando la pagina _PAGE_ de _PAGES_ con _TOTAL_ registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "loadingRecords": "Cargando Datos Por favor espere...",
+
+                }
+            });
 
         });
     </script>
