@@ -18,16 +18,15 @@ class RoleSeeder extends Seeder
     {
         $Admin = Role::create(['name' => 'admin', 'guard_name' => 'web']);
 
-        $Operadora = Role::create(['name' => 'tecnico', 'guard_name' => 'web']);
+        $Tecnico = Role::create(['name' => 'tecnico', 'guard_name' => 'web']);
 
         // Permisos de Usuarios.
 
         Permission::create(
-            [
-                'name' => 'dashboard.users.index',
-                'description' => 'Ver el panel de Usuarios'
-            ]
-                )->syncRoles([$Admin]);
+            ['name' => 'dashboard.users.index',
+             'description' => 'Ver el panel de Usuarios'
+            ])->syncRoles([$Admin]);
+
 
         Permission::create([
             'name' => 'dashboard.users.create',
@@ -83,6 +82,28 @@ class RoleSeeder extends Seeder
         Permission::create([
             'name' => 'dashboard.roles.destroy',
             'description' => 'Eliminar un Rol de la BD'
+        ])->syncRoles([$Admin]);
+
+
+        Permission::create([
+            'name' => 'dashboard.xmlfile',
+            'description' => 'Ver la vista de Actualiza la BD'
+        ])->syncRoles([$Admin]);
+        Permission::create([
+            'name' => 'dashboard.file.clientes',
+            'description' => 'Actualizar la los clientes en la DB'
+        ])->syncRoles([$Admin]);
+        Permission::create([
+            'name' => 'dashboard.file.facturas',
+            'description' => 'Actualizar la las facturas en la DB'
+        ])->syncRoles([$Admin]);
+        Permission::create([
+            'name' => 'dashboard.file.vaciarFacturas',
+            'description' => 'Vaciar las facturas de la DB'
+        ])->syncRoles([$Admin]);
+        Permission::create([
+            'name' => 'dashboard.file.agentes',
+            'description' => 'Actualizar la los agentes en la DB'
         ])->syncRoles([$Admin]);
     }
 }

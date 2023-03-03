@@ -19,7 +19,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 class XmlFileController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('can:dashboard.xmlfile')->only('index');
 
+        $this->middleware('can:dashboard.file.clientes')->only('clientes');
+        $this->middleware('can:dashboard.file.facturas')->only('facturas');
+        $this->middleware('can:dashboard.file.agentes')->only('agentes');
+        $this->middleware('can:dashboard.file.vaciarFacturas')->only('vaciarFacturas');
+    }
     public function index()
     {
         return view('files.index');

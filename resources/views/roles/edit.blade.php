@@ -5,9 +5,8 @@
 
     @if (session('info'))
         <div class="alert alert-success">
-            {{session('info')}}
+            {{ session('info') }}
         </div>
-        
     @endif
 
     {!! Form::model($role, ['route' => ['dashboard.roles.update', $role], 'method' => 'put']) !!}
@@ -30,12 +29,9 @@
     @foreach ($permissions as $permission)
         <div>
             <label>
-
-
                 {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
-              
-                {{ $permission->description }}
 
+                {{ $permission->description }}
             </label>
         </div>
     @endforeach

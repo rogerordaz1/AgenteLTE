@@ -50,7 +50,7 @@
             </li>
 
             {{-- Despues Cada vez que valla haciendo Algo con los links de la apk ir ajustando los li con los active................. --}}
-            @can('dashboard.users.index')
+            @can('dashboard.xmlfile')
                 <li class="nav-item">
                     <a href="{{ route('dashboard.xmlfile') }}"
                         class="nav-link {{ request()->is('dashboard/xmlfiles') || request()->is('dashboard/xmlfiles/*') ? 'active' : '' }}">
@@ -74,7 +74,7 @@
                     </a>
                 </li>
             @endcan
-            @can('dashboard.roles.index')
+            @can('dashboard.users.index')
                 <li class="nav-item ">
                     <a href="/dashboard/users"
                         class="nav-link {{ request()->is('dashboard/users') || request()->is('dashboard/users/*') ? 'active' : '' }}">
