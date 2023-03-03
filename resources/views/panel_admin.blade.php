@@ -1,6 +1,6 @@
 @extends('layouts.adminlte')
 
-@section('title', 'Roger')
+@section('title', 'Agentes Web')
 
 @section('body')
 

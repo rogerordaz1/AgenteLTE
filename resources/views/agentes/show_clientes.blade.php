@@ -1,5 +1,11 @@
 @extends('panel_admin')
 
+@section('title')
+{{ $agente->nombre }}
+
+@endsection
+
+
 @section('contenido')
     {{--  La DataTablde DE adminlte --}}
     <div class="row">
