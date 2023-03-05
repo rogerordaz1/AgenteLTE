@@ -212,15 +212,21 @@ class XmlFileController extends Controller
                     'icon' => 'error',
                 ]);
             }
+
+            $clientes = Cliente::where('id_oficina_comercial', $facturasArray[1]['OFICINA'])->get();
+            foreach ($clientes as $key => $value) {
+                if (!$value->factura) {
+                    $value->delete();
+                }
+            }
         }
 
+
+
+
+
         //Esto es para eliminar los clientes que no tengan factura asociados en la database...
-        $clientes = Cliente::all();
-        foreach ($clientes as $key => $value) {
-           if (!$value->factura) {
-            $value->delete();
-           }
-        }
+
 
         return response()->json([
             'message' => 'Los achivos se han subido correctamente',
